@@ -19,6 +19,7 @@ public class PlayerBehavior : MonoBehaviour
 
     //TopDown ability values
     private bool isTopDown = false;
+    private bool isTransitionOngoing = false;
 
 
     //Grounded values
@@ -36,11 +37,13 @@ public class PlayerBehavior : MonoBehaviour
     //Gameobjects
     private Rigidbody rb;
     private Transform cameraTransform;
+    private CameraBehavior cameraBehavior;
 
 
 
     private void Awake()
     {
+
         //Gameinput
         gameInput = new GameInput();
         move = gameInput.Player.Move;
@@ -50,6 +53,8 @@ public class PlayerBehavior : MonoBehaviour
         //GetCompontents
         rb = GetComponent<Rigidbody>();
         cameraTransform = Camera.main.transform;
+        cameraBehavior = Camera.main.GetComponent<CameraBehavior>();
+
     }
 
     private void OnEnable()
@@ -71,28 +76,35 @@ public class PlayerBehavior : MonoBehaviour
 
     private void Update()
     {
-        //Get camera transform
-        //cameraTransform = Camera.main.transform; //Am i stupid?
+        isTopDown = cameraBehavior.IsTopDown;
+        isTransitionOngoing = cameraBehavior.IsTransitionOngoing;
+
 
         //Rotate player model
         transform.eulerAngles = new Vector3(0, cameraTransform.eulerAngles.y, 0); //If Player should be able to tilt completly 0 need to be set to current rotation. (more complicated of course...)
 
 
         //Movement
-        if (!isTopDown)
+        if (!isTopDown && !isTransitionOngoing)
         {
             FPHorizontalMovement();
             FPVerticalMovement();
-            rb.velocity = velocity;
         }
-
-        Debug.Log(jetPackDuration);
+        else
+        {
+            velocity = rb.velocity;
+        }
 
     }
 
     private void FixedUpdate()
     {
-        
+        rb.velocity = velocity;
+
+        //Debug stuff
+        //Debug.Log(jetPackDuration);
+        //Debug.Log(rb.velocity);
+
     }
 
     private void FPHorizontalMovement()

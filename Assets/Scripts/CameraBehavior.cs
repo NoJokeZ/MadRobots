@@ -14,11 +14,14 @@ public class CameraBehavior : MonoBehaviour
     private Vector3 smoothEulerAngles;
 
     //TopDown values
-    private bool isTopDown = false; //WIP
-
+    public bool IsTopDown = false;
+    public bool IsTransitionOngoing = false;
+    private float transitionDuration = 3f;
+    
     //Input
     private GameInput gameInput;
     private InputAction look;
+    private InputAction topDownAbility;
 
     //Gameobjects and components
     private GameObject Player;
@@ -34,6 +37,7 @@ public class CameraBehavior : MonoBehaviour
         //Input
         gameInput = new GameInput();
         look = gameInput.Player.Look;
+        topDownAbility = gameInput.Player.TopDownAbility;
 
         //Gameobjects and components
         Player = GameObject.Find("Player");
@@ -46,32 +50,48 @@ public class CameraBehavior : MonoBehaviour
     private void OnEnable()
     {
         look.Enable();
+        topDownAbility.Enable();
     }
 
     private void OnDisable()
     {
         look.Disable();
+        topDownAbility.Disable();
     }
 
     private void Update()
     {
-        CameraMovement(); //Maybe move to FixedUpate or LateUpdate if not smooth
-        
+        if (topDownAbility.WasPressedThisFrame() && !IsTopDown && !IsTransitionOngoing)
+        {
+            StartCoroutine(TransitionToTD());
+        }
+
+        if (topDownAbility.WasPressedThisFrame() && IsTopDown && !IsTransitionOngoing)
+        {
+            StartCoroutine(TransitionToFP());
+        }
 
 
-        if (isTopDown)
+        if (IsTopDown && !IsTransitionOngoing)
         {
             CameraTopDownFollow();
         }
-        else
+        
+        if (!IsTopDown && !IsTransitionOngoing)
         {
             CameraFirsPersonFollow();
+            CameraMovement();
         }
+
+        Debug.Log(fPCameraTransform.transform.position);
+        Debug.Log(fPCameraTransform.transform.rotation);
+
     }
 
     private void FixedUpdate()
     {
-        
+       
+
     }
 
     private void CameraMovement()
@@ -102,4 +122,47 @@ public class CameraBehavior : MonoBehaviour
         transform.position = tDCameraTransform.position;
     }
 
+    private IEnumerator TransitionToTD()
+    {
+
+        float invertedTransitionDuration = (1f / transitionDuration);
+        fPCameraTransform.rotation = transform.rotation;
+
+        IsTransitionOngoing = true;
+        float t = 0f;
+
+        while (t < invertedTransitionDuration)
+        {
+            t += Time.deltaTime * (Time.timeScale / transitionDuration);
+
+            transform.position = Vector3.Lerp(transform.position, tDCameraTransform.position, t);
+            transform.rotation = Quaternion.Lerp(transform.rotation, tDCameraTransform.rotation, t);
+
+            yield return null;
+        }
+
+        IsTransitionOngoing = false;
+        IsTopDown = true;
+    }
+
+    private IEnumerator TransitionToFP()
+    {
+        float invertedTransitionDuration = (1f / transitionDuration);
+
+        IsTransitionOngoing = true;
+        float t = 0f;
+
+        while (t < invertedTransitionDuration)
+        {
+            t += Time.deltaTime * (Time.timeScale/transitionDuration);
+
+            transform.position = Vector3.Lerp(transform.position, fPCameraTransform.position, t);
+            transform.rotation = Quaternion.Lerp(transform.rotation, fPCameraTransform.rotation, t);
+
+            yield return null;
+        }
+
+        IsTransitionOngoing = false;
+        IsTopDown = false;
+    }
 }
