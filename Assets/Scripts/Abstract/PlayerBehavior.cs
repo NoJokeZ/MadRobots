@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-public class PlayerBehavior : MonoBehaviour
+public abstract class PlayerBehavior : MonoBehaviour
 {
 
     //Movement behavior values
@@ -107,6 +108,9 @@ public class PlayerBehavior : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// First-Person horizontal movement
+    /// </summary>
     private void FPHorizontalMovement()
     {
 
@@ -128,7 +132,9 @@ public class PlayerBehavior : MonoBehaviour
         
     }
 
-
+    /// <summary>
+    /// First-Person vertical movement
+    /// </summary>
     private void FPVerticalMovement()
     {
         //Get current velocity.y
@@ -153,5 +159,8 @@ public class PlayerBehavior : MonoBehaviour
             if (jetPackDuration < 0) jetPackDuration = 0; //no values underneat 0 for fuel display
         }
     }
+
+
+
 
 }
