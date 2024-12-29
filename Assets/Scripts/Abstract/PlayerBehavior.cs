@@ -32,17 +32,20 @@ public abstract class PlayerBehavior : MonoBehaviour
     private GameInput gameInput;
     private InputAction move;
     private InputAction jetPack;
-    private InputAction topDownAbility; //WIP
+    private InputAction topDownAbility;
+    protected InputAction shoot;
 
 
     //Gameobjects
     private Rigidbody rb;
-    private Transform cameraTransform;
+    protected Transform cameraTransform;
     private CameraBehavior cameraBehavior;
+    private GameObject weaponEnds;
+    protected Transform[] barrels;
+    protected int barrelsIndex = 1; //because 0 is always the parent object of the barrels. thanks unity...
 
 
-
-    private void Awake()
+    protected virtual void Awake()
     {
 
         //Gameinput
@@ -50,12 +53,15 @@ public abstract class PlayerBehavior : MonoBehaviour
         move = gameInput.Player.Move;
         jetPack = gameInput.Player.Jump;
         topDownAbility = gameInput.Player.TopDownAbility;
+        shoot = gameInput.Player.Attack;
 
         //GetCompontents
         rb = GetComponent<Rigidbody>();
         cameraTransform = Camera.main.transform;
         cameraBehavior = Camera.main.GetComponent<CameraBehavior>();
-
+        weaponEnds = GameObject.Find("WeaponEnds");
+        barrels = weaponEnds.GetComponentsInChildren<Transform>();
+        
     }
 
     private void OnEnable()
@@ -64,6 +70,7 @@ public abstract class PlayerBehavior : MonoBehaviour
         move.Enable();
         jetPack.Enable();
         topDownAbility.Enable();
+        shoot.Enable();
 
     }
 
@@ -73,9 +80,10 @@ public abstract class PlayerBehavior : MonoBehaviour
         move.Disable();
         jetPack.Disable();
         topDownAbility.Disable();
+        shoot.Disable();
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         isTopDown = cameraBehavior.IsTopDown;
         isTransitionOngoing = cameraBehavior.IsTransitionOngoing;
@@ -93,12 +101,12 @@ public abstract class PlayerBehavior : MonoBehaviour
         }
         else
         {
-            velocity = rb.velocity;
+            velocity = rb.velocity; //Needed so that velocity is still beeing updated even if movement is locked
         }
 
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         rb.velocity = velocity;
 
@@ -159,8 +167,4 @@ public abstract class PlayerBehavior : MonoBehaviour
             if (jetPackDuration < 0) jetPackDuration = 0; //no values underneat 0 for fuel display
         }
     }
-
-
-
-
 }
