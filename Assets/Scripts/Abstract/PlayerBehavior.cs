@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public abstract class PlayerBehavior : MonoBehaviour
 {
+    //Healthpoints
+    protected int healthPoints = 20;
 
     //Movement behavior values
     protected float moveSpeed = 5f;

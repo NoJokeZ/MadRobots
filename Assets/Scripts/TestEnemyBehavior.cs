@@ -8,7 +8,7 @@ public class TestEnemyBehavior : EnemyBehavior
     protected override void Awake()
     {
         base.Awake();
-        healtPoints = 10;
+        HealtPoints = 10;
     }
 
 }

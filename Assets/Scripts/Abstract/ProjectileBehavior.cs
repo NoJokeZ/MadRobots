@@ -5,10 +5,10 @@ using UnityEngine;
 public abstract class ProjectileBehavior : MonoBehaviour
 {
     //Projectile values
-    public float projectileSpeed { get; protected set; }
-    public float dropOffDistance { get; protected set; }
-    public float dropOffSpeed { get; protected set; }
-    public float lifeSpan { get; protected set; }
+    public float ProjectileSpeed { get; protected set; }
+    public float DropOffDistance { get; protected set; }
+    public float DropOffSpeed { get; protected set; }
+    public float LifeSpan { get; protected set; }
     public int Damage { get; protected set; }
 
     //Trajectory values
@@ -42,9 +42,9 @@ public abstract class ProjectileBehavior : MonoBehaviour
     /// </summary>
     private void LifeSpanCheck()
     {
-        lifeSpan -= Time.deltaTime;
+        LifeSpan -= Time.deltaTime;
 
-        if (lifeSpan <= 0f)
+        if (LifeSpan <= 0f)
         {
             Destroy(gameObject);
         }
@@ -72,7 +72,7 @@ public abstract class ProjectileBehavior : MonoBehaviour
     {
         Vector3 trajectoryDirection = Quaternion.Euler(transform.eulerAngles) * Vector3.forward;
 
-        velocity = trajectoryDirection * projectileSpeed;
+        velocity = trajectoryDirection * ProjectileSpeed;
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public abstract class ProjectileBehavior : MonoBehaviour
     /// </summary>
     private void RotateDownwards()
     {
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x + dropOffSpeed, transform.eulerAngles.y, transform.eulerAngles.z);
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x + DropOffSpeed, transform.eulerAngles.y, transform.eulerAngles.z);
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public abstract class ProjectileBehavior : MonoBehaviour
         Vector3 currentPostion = transform.position;
         float distance = Vector3.Distance(startPosition, currentPostion);
 
-        if (distance > dropOffDistance)
+        if (distance > DropOffDistance)
         {
             dropOff = true;
         }

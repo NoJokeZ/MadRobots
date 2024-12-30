@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class EnemyBehavior : MonoBehaviour
 {
-    public int healtPoints { get; protected set; } = 10; //Default HP
+    public int HealtPoints { get; protected set; } = 10; //Default HP
     private bool isExplosionDamageDelay = false;
     private float explosionDamageDelayTime = 0.25f;
     private float explosionDamageDeleyCounter = 0f;
@@ -27,7 +27,7 @@ public abstract class EnemyBehavior : MonoBehaviour
 
     protected virtual void TakeDamage(int damage)
     {
-        healtPoints -= damage;
+        HealtPoints -= damage;
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public abstract class EnemyBehavior : MonoBehaviour
     /// </summary>
     private void CheckHP()
     {
-        if (healtPoints <= 0)
+        if (HealtPoints <= 0)
         {
             Destroy(gameObject);
         }

@@ -9,15 +9,15 @@ public class CameraBehavior : MonoBehaviour
 {
 
     //View behaviour values
-    [SerializeField] float lookSensitivity = 20f;
-    [SerializeField] float cameraLerpSpeed = 30f;
+    private float lookSensitivity = 15f;
+    private float cameraLerpSpeed = 30f;
     private float maxLookAngle = 60f;
     private Vector3 eulerAngles;
     private Vector3 smoothEulerAngles;
 
     //TopDown values
-    public bool IsTopDown = false;
-    public bool IsTransitionOngoing = false;
+    public bool IsTopDown { get; private set; } = false;
+    public bool IsTransitionOngoing { get; private set; } = false;
     private float transitionDuration = 3f;
     
     //Input
@@ -26,7 +26,7 @@ public class CameraBehavior : MonoBehaviour
     private InputAction topDownAbility;
 
     //Gameobjects and components
-    private GameObject Player;
+    private GameObject player;
     private PlayerBehavior playerBehavior;
     private Transform fPCameraTransform;
     private Transform tDCameraTransform;
@@ -48,12 +48,12 @@ public class CameraBehavior : MonoBehaviour
         topDownAbility = gameInput.Player.TopDownAbility;
 
         //Gameobjects and components
-        Player = GameObject.FindWithTag("Player");
-        playerBehavior = Player.GetComponent<PlayerBehavior>();
+        player = GameObject.FindWithTag("Player");
+        playerBehavior = player.GetComponent<PlayerBehavior>();
 
         //Get camera positions
-        fPCameraTransform = Player.transform.Find("FPCameraLocation");
-        tDCameraTransform = Player.transform.Find("TDCameraLocation");
+        fPCameraTransform = player.transform.Find("FPCameraLocation");
+        tDCameraTransform = player.transform.Find("TDCameraLocation");
 
         //Set cursor properties
         Cursor.lockState = CursorLockMode.Locked;
