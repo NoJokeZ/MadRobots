@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using TreeEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class MissleTDBehavior : ProjectileBehavior
 {
@@ -16,8 +11,12 @@ public class MissleTDBehavior : ProjectileBehavior
 
     private bool targetMouse = false;
     private Vector3 startPosition;
-    private float targetMouseDistance = 5f;
-    private float targetMouseSmothness = 15f; // Needs testing
+    private float targetMouseDistance = 4f;
+    private float targetMouseSmothness = 120f; // Needs testing
+
+    private Vector3 screenPosition;
+    private Vector3 targetPosition;
+    private RaycastHit hitData;
 
     protected override void Awake()
     {
@@ -28,8 +27,10 @@ public class MissleTDBehavior : ProjectileBehavior
         explosion = Resources.Load<GameObject>("Explosion");
 
         //Missle values
-        ProjectileSpeed = 2f;
+        ProjectileSpeed = 6f;
         LifeSpan = 40f;
+
+        GetTargetLocation();
     }
 
     protected override void Update()
@@ -66,11 +67,12 @@ public class MissleTDBehavior : ProjectileBehavior
     /// </summary>
     private void TargetMouse()
     {
-        Vector3 mouseTarget = Camera.main.WorldToScreenPoint(transform.position);
-        Vector3 direction = (mouseTarget - transform.position).normalized;
-        Quaternion targetDirection = Quaternion.LookRotation(direction);
 
+        Vector3 direction = (targetPosition - transform.position).normalized;
+
+        Quaternion targetDirection = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetDirection, targetMouseSmothness * Time.deltaTime);
+
     }
 
     /// <summary>
@@ -97,6 +99,18 @@ public class MissleTDBehavior : ProjectileBehavior
             Vector3 position = contact.point;
             Instantiate(explosion, position, rotation);
             Destroy(gameObject);
+        }
+    }
+
+    private void GetTargetLocation()
+    {
+        screenPosition = Input.mousePosition;
+
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+
+        if (Physics.Raycast(ray, out hitData))
+        {
+            targetPosition = hitData.point;
         }
     }
 }

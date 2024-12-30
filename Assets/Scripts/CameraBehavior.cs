@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class CameraBehavior : MonoBehaviour
 {
@@ -19,7 +16,7 @@ public class CameraBehavior : MonoBehaviour
     public bool IsTopDown { get; private set; } = false;
     public bool IsTransitionOngoing { get; private set; } = false;
     private float transitionDuration = 3f;
-    
+
     //Input
     private GameInput gameInput;
     private InputAction look;
@@ -112,7 +109,7 @@ public class CameraBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
-       
+
 
     }
 
@@ -163,7 +160,7 @@ public class CameraBehavior : MonoBehaviour
     {
         //Crosshair invisible
         crosshairMaterial.color = Color.clear;
-           
+
         float invertedTransitionDuration = (1f / transitionDuration); //to make the transition end faster after the camera is already in it's right place
         fPCameraTransform.rotation = transform.rotation; //save rotation of where player looked before transition -> for more smoothness
 
@@ -186,7 +183,7 @@ public class CameraBehavior : MonoBehaviour
 
         //Cursor visable
         Cursor.lockState = CursorLockMode.Confined;
-        
+
     }
 
     /// <summary>
@@ -206,7 +203,7 @@ public class CameraBehavior : MonoBehaviour
         //Transition
         while (t < invertedTransitionDuration)
         {
-            t += Time.deltaTime * (Time.timeScale/transitionDuration);
+            t += Time.deltaTime * (Time.timeScale / transitionDuration);
 
             transform.position = Vector3.Lerp(transform.position, fPCameraTransform.position, t);
             transform.rotation = Quaternion.Lerp(transform.rotation, fPCameraTransform.rotation, t);

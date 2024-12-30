@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public abstract class PlayerBehavior : MonoBehaviour
 {
@@ -63,7 +58,7 @@ public abstract class PlayerBehavior : MonoBehaviour
         cameraBehavior = Camera.main.GetComponent<CameraBehavior>();
         weaponEnds = GameObject.Find("WeaponEnds");
         barrels = weaponEnds.GetComponentsInChildren<Transform>();
-        
+
     }
 
     protected void OnEnable()
@@ -132,14 +127,14 @@ public abstract class PlayerBehavior : MonoBehaviour
 
         //Look direction * input
         moveDirection = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * moveDirection;
-        
+
         //Velocity decision
         float acceleration = isGrounded ? groundAcceleration : airAcceleration;
 
         //smooth out velocity
         velocity.x = Mathf.Lerp(velocity.x, moveDirection.x * moveSpeed, acceleration * Time.deltaTime);
         velocity.z = Mathf.Lerp(velocity.z, moveDirection.z * moveSpeed, acceleration * Time.deltaTime);
-        
+
     }
 
     /// <summary>

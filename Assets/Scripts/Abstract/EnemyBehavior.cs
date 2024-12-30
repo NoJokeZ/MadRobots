@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class EnemyBehavior : MonoBehaviour
@@ -9,11 +6,11 @@ public abstract class EnemyBehavior : MonoBehaviour
     private bool isExplosionDamageDelay = false;
     private float explosionDamageDelayTime = 0.25f;
     private float explosionDamageDeleyCounter = 0f;
-    
+
 
     protected virtual void Awake()
     {
-        
+
     }
 
     protected virtual void Update()

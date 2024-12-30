@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ExplosionBehavior : MonoBehaviour
 {
-    
+
     protected float lifeSpan;
     public int Damage { get; protected set; }
 

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class RocketV1Behavior : PlayerBehavior
@@ -32,7 +29,7 @@ public class RocketV1Behavior : PlayerBehavior
 
     private void launchRocket()
     {
-        if(shoot.WasPressedThisFrame() && cooldown == 0f)
+        if (shoot.WasPressedThisFrame() && cooldown == 0f)
         {
             cooldown = shootCooldown;
 
@@ -49,10 +46,6 @@ public class RocketV1Behavior : PlayerBehavior
             }
             else
             {
-                //float x = cameraTransform.rotation.x * -1;
-                //float y = cameraTransform.rotation.y * -1;
-                //float z = cameraTransform.rotation.z * -1;
-                //Vector3 inverseCameraRotation = new Vector3(x, y, z);
 
                 Vector3 inverseCameraRoation = new Vector3(cameraTransform.eulerAngles.x * -1, cameraTransform.eulerAngles.z, cameraTransform.eulerAngles.y); //I don't know why it works like that... but it does
 

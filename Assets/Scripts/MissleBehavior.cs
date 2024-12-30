@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MissleBehavior : ProjectileBehavior
@@ -19,7 +16,7 @@ public class MissleBehavior : ProjectileBehavior
         base.Awake();
 
         startPosition = transform.position;
-        
+
         explosion = Resources.Load<GameObject>("Explosion");
 
         //Missle values
