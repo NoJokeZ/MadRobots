@@ -4,10 +4,11 @@ using UnityEngine;
 
 public abstract class ProjectileBehavior : MonoBehaviour
 {
-    protected float projectileSpeed = 1f;
-    protected float dropOffDistance = 1f;
-    protected float dropOffSpeed = 1f;
-    protected float lifeSpan = 10f;
+    //Projectile values
+    public float projectileSpeed { get; protected set; }
+    public float dropOffDistance { get; protected set; }
+    public float dropOffSpeed { get; protected set; }
+    public float lifeSpan { get; protected set; }
     public int Damage { get; protected set; }
 
     //Trajectory values
@@ -17,13 +18,11 @@ public abstract class ProjectileBehavior : MonoBehaviour
 
     //Gameobjects and components
     private Rigidbody rb;
-    private GameObject explosion;
-
-    private bool collided = false;
 
     protected virtual void Awake()
     {
-
+        rb = GetComponent<Rigidbody>();
+        startPosition = transform.position;
     }
 
 
@@ -31,6 +30,31 @@ public abstract class ProjectileBehavior : MonoBehaviour
     {
         Trajectory();
 
+        DropOffCheck();
+
+        rb.velocity = velocity;
+
+        LifeSpanCheck();
+    }
+
+    /// <summary>
+    /// LifeSpan calculation
+    /// </summary>
+    private void LifeSpanCheck()
+    {
+        lifeSpan -= Time.deltaTime;
+
+        if (lifeSpan <= 0f)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    /// <summary>
+    /// Checks projectile drop off
+    /// </summary>
+    private void DropOffCheck()
+    {
         if (!dropOff)
         {
             CalculateWhenDropOff();
@@ -39,17 +63,11 @@ public abstract class ProjectileBehavior : MonoBehaviour
         {
             RotateDownwards();
         }
-
-        rb.velocity = velocity;
-
-        lifeSpan = lifeSpan - Time.deltaTime;
-
-        if (lifeSpan <= 0f)
-        {
-            Destroy(gameObject);
-        }
     }
 
+    /// <summary>
+    /// Porjectile trajectory calucaltion
+    /// </summary>
     private void Trajectory()
     {
         Vector3 trajectoryDirection = Quaternion.Euler(transform.eulerAngles) * Vector3.forward;
@@ -57,11 +75,17 @@ public abstract class ProjectileBehavior : MonoBehaviour
         velocity = trajectoryDirection * projectileSpeed;
     }
 
+    /// <summary>
+    /// Applies projectile drop off
+    /// </summary>
     private void RotateDownwards()
     {
         transform.eulerAngles = new Vector3(transform.eulerAngles.x + dropOffSpeed, transform.eulerAngles.y, transform.eulerAngles.z);
     }
 
+    /// <summary>
+    /// Calculates when projectile drop off starts
+    /// </summary>
     private void CalculateWhenDropOff()
     {
         Vector3 currentPostion = transform.position;
@@ -70,19 +94,6 @@ public abstract class ProjectileBehavior : MonoBehaviour
         if (distance > dropOffDistance)
         {
             dropOff = true;
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (!collided)
-        {
-            collided = true; //needed that no double collissios lead to double explosions because of rockets bigger models / will maybe be sitched to the missle script but could be useful for other projectiles too
-            ContactPoint contact = collision.contacts[0];
-            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
-            Vector3 position = contact.point;
-            Instantiate(explosion, position, rotation);
-            Destroy(gameObject);
         }
     }
 }
