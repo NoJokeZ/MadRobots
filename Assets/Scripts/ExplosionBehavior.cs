@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class ExplosionBehavior : MonoBehaviour
+public class ExplosionBehavior : ProjectileBehavior
 {
-    private float lifeSpan = 3f;
-    private int damage = 5;
 
-
-    private void Update()
+    protected override void Awake()
     {
-        lifeSpan -= Time.deltaTime;
-        
-        if (lifeSpan <= 0f )
-        {
-            Destroy(gameObject);
-        }
+        base.Awake();
+        lifeSpan = 3f;
+        Damage = 5;
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Destroy(gameObject);
     }
 }

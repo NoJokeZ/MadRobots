@@ -10,37 +10,37 @@ public abstract class PlayerBehavior : MonoBehaviour
 {
 
     //Movement behavior values
-    [SerializeField] float moveSpeed = 5f;
-    [SerializeField] float groundAcceleration = 10f;
-    [SerializeField] float airAcceleration = 2f;
-    [SerializeField] float jetPackPower = 3f;
-    [SerializeField] float jetPackMaxDuration = 3f;
-    private float jetPackDuration = 0f;
-    private Vector3 velocity;
+    protected float moveSpeed = 5f;
+    protected float groundAcceleration = 10f;
+    protected float airAcceleration = 2f;
+    protected float jetPackPower = 3f;
+    protected float jetPackMaxDuration = 3f;
+    protected float jetPackDuration = 0f;
+    protected Vector3 velocity;
 
     //TopDown ability values
-    private bool isTopDown = false;
-    private bool isTransitionOngoing = false;
+    protected bool isTopDown = false;
+    protected bool isTransitionOngoing = false;
 
 
     //Grounded values
-    private bool isGrounded;
-    private float groundCheckRange = 1f; //groundCheckRange needs to be re-set after Player models are done
+    protected bool isGrounded;
+    protected float groundCheckRange = 1f; //groundCheckRange needs to be re-set after Player models are done
 
 
     //Input
-    private GameInput gameInput;
-    private InputAction move;
-    private InputAction jetPack;
-    private InputAction topDownAbility;
+    protected GameInput gameInput;
+    protected InputAction move;
+    protected InputAction jetPack;
+    protected InputAction topDownAbility;
     protected InputAction shoot;
 
 
     //Gameobjects
-    private Rigidbody rb;
+    protected Rigidbody rb;
     protected Transform cameraTransform;
-    private CameraBehavior cameraBehavior;
-    private GameObject weaponEnds;
+    protected CameraBehavior cameraBehavior;
+    protected GameObject weaponEnds;
     protected Transform[] barrels;
     protected int barrelsIndex = 1; //because 0 is always the parent object of the barrels. thanks unity...
 
@@ -64,7 +64,7 @@ public abstract class PlayerBehavior : MonoBehaviour
         
     }
 
-    private void OnEnable()
+    protected void OnEnable()
     {
         //Enable Inputs
         move.Enable();
@@ -74,7 +74,7 @@ public abstract class PlayerBehavior : MonoBehaviour
 
     }
 
-    private void OnDisable()
+    protected void OnDisable()
     {
         //Disable Inputs
         move.Disable();
@@ -119,7 +119,7 @@ public abstract class PlayerBehavior : MonoBehaviour
     /// <summary>
     /// First-Person horizontal movement
     /// </summary>
-    private void FPHorizontalMovement()
+    protected void FPHorizontalMovement()
     {
 
         Vector3 moveDirection = Vector3.zero;
@@ -143,7 +143,7 @@ public abstract class PlayerBehavior : MonoBehaviour
     /// <summary>
     /// First-Person vertical movement
     /// </summary>
-    private void FPVerticalMovement()
+    protected void FPVerticalMovement()
     {
         //Get current velocity.y
         velocity.y = rb.velocity.y;

@@ -19,6 +19,8 @@ public class MissleBehavior : MonoBehaviour
     private Rigidbody rb;
     private GameObject explosion;
 
+    private bool collided = false;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -69,10 +71,14 @@ public class MissleBehavior : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        ContactPoint contact = collision.contacts[0];
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
-        Vector3 position = contact.point;
-        Instantiate(explosion, position, rotation);
-        Destroy(gameObject);        
+        if (!collided)
+        {
+            collided = true; //needed that no double collissios lead to double explosions
+            ContactPoint contact = collision.contacts[0];
+            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
+            Vector3 position = contact.point;
+            Instantiate(explosion, position, rotation);
+            Destroy(gameObject);
+        }
     }
 }
