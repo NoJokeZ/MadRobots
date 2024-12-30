@@ -64,7 +64,7 @@ public abstract class EnemyBehavior : MonoBehaviour
         {
             isExplosionDamageDelay = true;
             explosionDamageDeleyCounter = explosionDamageDelayTime;
-            int damage = other.gameObject.GetComponent<ProjectileBehavior>().Damage;
+            int damage = other.gameObject.GetComponent<ExplosionBehavior>().Damage;
             TakeDamage(damage);
         }
     }
