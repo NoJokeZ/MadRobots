@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ExplosionBehavior : ProjectileBehavior
+public class MissleExplosionBehavior : ExplosionBehavior
 {
 
     protected override void Awake()
     {
         base.Awake();
-        lifeSpan = 3f;
+        lifeSpan = 0.5f;
         Damage = 5;
-    }
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Destroy(gameObject);
     }
 }
