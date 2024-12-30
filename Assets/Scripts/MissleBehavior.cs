@@ -8,13 +8,18 @@ public class MissleBehavior : ProjectileBehavior
     //Gameobjects and components
     private GameObject explosion;
 
-
     private bool collided = false;
+
+    private Vector3 velocity;
+    private bool dropOff = false;
+    private Vector3 startPosition;
 
     protected override void Awake()
     {
         base.Awake();
 
+        startPosition = transform.position;
+        
         explosion = Resources.Load<GameObject>("Explosion");
 
         //Missle values
@@ -24,6 +29,18 @@ public class MissleBehavior : ProjectileBehavior
         LifeSpan = 20f;
         Damage = 1;
 
+    }
+
+
+    protected override void Update()
+    {
+        base.Update();
+
+        Trajectory();
+
+        DropOffCheck();
+
+        rb.velocity = velocity;
     }
 
     /// <summary>
@@ -40,6 +57,53 @@ public class MissleBehavior : ProjectileBehavior
             Vector3 position = contact.point;
             Instantiate(explosion, position, rotation);
             Destroy(gameObject);
+        }
+    }
+
+    /// <summary>
+    /// Checks projectile drop off
+    /// </summary>
+    private void DropOffCheck()
+    {
+        if (!dropOff)
+        {
+            CalculateWhenDropOff();
+        }
+        else
+        {
+            RotateDownwards();
+        }
+    }
+
+    /// <summary>
+    /// Porjectile trajectory calucaltion
+    /// </summary>
+    private void Trajectory()
+    {
+        Vector3 trajectoryDirection = Quaternion.Euler(transform.eulerAngles) * Vector3.forward;
+
+        velocity = trajectoryDirection * ProjectileSpeed;
+    }
+
+    /// <summary>
+    /// Applies projectile drop off
+    /// </summary>
+    private void RotateDownwards()
+    {
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x + DropOffSpeed, transform.eulerAngles.y, transform.eulerAngles.z);
+    }
+
+    /// <summary>
+    /// Calculates when projectile drop off starts
+    /// </summary>
+    private void CalculateWhenDropOff()
+    {
+        Vector3 currentPostion = transform.position;
+        float distance = Vector3.Distance(startPosition, currentPostion);
+
+        if (distance > DropOffDistance)
+        {
+            dropOff = true;
         }
     }
 }

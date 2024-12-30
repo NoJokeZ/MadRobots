@@ -1553,10 +1553,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc4c900a9a1a89d42bff83e7b266e7ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookSensitivity: 40
-  cameraLerpSpeed: 30
-  IsTopDown: 0
-  IsTransitionOngoing: 0
   cursorTD: {fileID: 2800000, guid: acbe5fa41cfd6e54e86a2df58d924011, type: 3}
   crosshairMaterial: {fileID: 2100000, guid: 337e9388b2f71314cb22eb3cf170be97, type: 2}
 --- !u!1 &1121937640
