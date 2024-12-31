@@ -4,7 +4,7 @@ public class RocketV1Behavior : PlayerBehavior
 {
     //Cooldown values
     private float cooldown;
-    private float shootCooldown = 2f;
+    private float shootCooldown = 0.2f;
 
     //Bullet prefab
     private GameObject missle;

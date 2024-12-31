@@ -11,6 +11,7 @@ public class CameraBehavior : MonoBehaviour
     private float maxLookAngle = 60f;
     private Vector3 eulerAngles;
     private Vector3 smoothEulerAngles;
+    private float topDownFollowSpeed = 10f;
 
     //TopDown values
     public bool IsTopDown { get; private set; } = false;
@@ -36,9 +37,6 @@ public class CameraBehavior : MonoBehaviour
 
     private void Awake()
     {
-        //Set mouse state
-        Cursor.lockState = CursorLockMode.Locked;
-
         //Input
         gameInput = new GameInput();
         look = gameInput.Player.Look;
@@ -56,6 +54,7 @@ public class CameraBehavior : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cursorPivot = new Vector2(cursorTD.width / 2, cursorTD.height / 2);
         Cursor.SetCursor(cursorTD, cursorPivot, CursorMode.Auto);
+        crosshairMaterial.color = Color.white;
 
     }
 
@@ -148,7 +147,16 @@ public class CameraBehavior : MonoBehaviour
     /// </summary>
     private void CameraTopDownFollow()
     {
-        transform.position = tDCameraTransform.position;
+        Vector3 mousePosition = Input.mousePosition;
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        mousePosition = ray.origin;
+
+        Vector3 newCameraPosition = Vector3.MoveTowards(transform.position, mousePosition, topDownFollowSpeed);
+        newCameraPosition.y = tDCameraTransform.position.y;
+        transform.position = newCameraPosition;
+        
+
+        
     }
 
 
