@@ -7,10 +7,12 @@ public abstract class EnemyBehavior : MonoBehaviour
     private float explosionDamageDelayTime = 0.25f;
     private float explosionDamageDeleyCounter = 0f;
 
+    protected GameObject player;
+
 
     protected virtual void Awake()
     {
-
+        player = GameObject.FindWithTag("Player");
     }
 
     protected virtual void Update()

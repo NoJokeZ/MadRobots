@@ -56,7 +56,7 @@ public abstract class PlayerBehavior : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         cameraTransform = Camera.main.transform;
         cameraBehavior = Camera.main.GetComponent<CameraBehavior>();
-        weaponEnds = GameObject.Find("WeaponEnds");
+        weaponEnds = transform.Find("UpperBody/Weapons/WeaponEnds").gameObject;
         barrels = weaponEnds.GetComponentsInChildren<Transform>();
 
     }

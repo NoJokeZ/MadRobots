@@ -93,6 +93,8 @@ public class CameraBehavior : MonoBehaviour
             FPCameraMovement();
         }
 
+        
+
         //Debug.Log(fPCameraTransform.transform.position);
         //Debug.Log(fPCameraTransform.transform.rotation);
 

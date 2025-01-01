@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class RocketV1Behavior : PlayerBehavior
 {
@@ -10,6 +11,12 @@ public class RocketV1Behavior : PlayerBehavior
     private GameObject missle;
     private GameObject missleTD;
 
+    //WeaponTurn values
+    private Transform weapons;
+    private Transform weaponsFPSave;
+    private Quaternion weaponsUp;
+    private Quaternion weaponsDown;
+
 
     protected override void Awake()
     {
@@ -17,6 +24,9 @@ public class RocketV1Behavior : PlayerBehavior
 
         missle = Resources.Load<GameObject>("Missle");
         missleTD = Resources.Load<GameObject>("missleTD");
+
+        weapons = transform.Find("Weapons");
+
     }
 
     protected override void Update()
@@ -24,6 +34,15 @@ public class RocketV1Behavior : PlayerBehavior
         base.Update();
         launchRocket();
         CooldownCountDown();
+
+        if (topDownAbility.WasPressedThisFrame() && !isTopDown && !isTransitionOngoing)
+        {
+            StartCoroutine(RotateWeaponsToTD());
+        }
+        else if (topDownAbility.WasPressedThisFrame() && isTopDown && !isTransitionOngoing)
+        {
+            StartCoroutine(RotateWeaponsToFP());
+        }
 
     }
 
@@ -66,4 +85,41 @@ public class RocketV1Behavior : PlayerBehavior
             cooldown = 0f;
         }
     }
+
+    private IEnumerator RotateWeaponsToTD()
+    {
+
+        //weaponsFPSave.rotation = weapons.rotation; //maybe need this
+        
+        float t = 0f;
+
+        //Transition
+        while (t < 1)
+        {
+            t += Time.deltaTime * (Time.timeScale / 1);
+
+            weapons.rotation = Quaternion.Lerp(weapons.rotation, Quaternion.Euler(new Vector3(-90f, weapons.eulerAngles.y, weapons.eulerAngles.z)), t);
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator RotateWeaponsToFP()
+    {
+
+        //weaponsFPSave.rotation = weapons.rotation; //maybe need this
+
+        float t = 0f;
+
+        //Transition
+        while (t < 1)
+        {
+            t += Time.deltaTime * (Time.timeScale / 1);
+
+            weapons.rotation = Quaternion.Lerp(weapons.rotation, Quaternion.Euler(new Vector3(0f, weapons.eulerAngles.y, weapons.eulerAngles.z)), t);
+
+            yield return null;
+        }
+    }
+
 }
