@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -17,12 +18,22 @@ public class EnemyTurretV1 : EnemyBehavior
 
     private float detectionRange = 10f;
 
+    private float startShootAngle = 20f;
+
     private int playerLayerMaskIndex;
 
     bool playerDetected = false;
     bool playerOnceSeen = false;
+    bool startShoot = false;
 
+    private Vector3 playerDirection;
     private Vector3 playerLastSeenPostion;
+    private Vector3 lookDirection;
+
+    private float shootInterval;
+    private float shootCooldown;
+
+    private GameObject missle;
 
     protected override void Awake()
     {
@@ -32,6 +43,7 @@ public class EnemyTurretV1 : EnemyBehavior
         weapon = transform.Find("Body2/Weapon");
         weaponEnd = transform.Find("Body2/Weapon/WeaponEnd");
         playerLayerMaskIndex = LayerMask.NameToLayer("Player");
+        missle = Resources.Load<GameObject>("Missle");
     }
 
     protected override void Update()
@@ -42,8 +54,19 @@ public class EnemyTurretV1 : EnemyBehavior
         {
             RotateTowardsPlayer();
         }
+        
+        if (playerDetected)
+        {
+            CheckShouldShoot();
+        }
+
+        if (startShoot)
+        {
+            Shoot();
+        }
 
     }
+
 
     private void RotateTowardsPlayer()
     {
@@ -62,7 +85,7 @@ public class EnemyTurretV1 : EnemyBehavior
 
     private void CheckCanSeePlayer()
     {
-        Vector3 playerDirection = (player.transform.position - upperBody.position).normalized;
+        playerDirection = (player.transform.position - upperBody.position).normalized;
         Debug.DrawRay(upperBody.position, playerDirection * detectionRange, Color.red);
 
         if (Physics.Raycast(upperBody.position, playerDirection, out RaycastHit hitInfo, detectionRange, ~LayerMask.GetMask("Enemy")))
@@ -77,6 +100,34 @@ public class EnemyTurretV1 : EnemyBehavior
         else
         {
             playerDetected = false;
+        }
+    }
+    private void CheckShouldShoot()
+    {
+        lookDirection = upperBody.transform.forward;
+        float angle = Vector3.Angle(lookDirection, playerDirection);
+
+        if (angle <= startShootAngle)
+        {
+            startShoot = true;
+        }
+        else
+        {
+            startShoot = false;
+        }
+    }
+
+    private void Shoot()
+    {
+        if (shootCooldown == 0)
+        {
+            Instantiate(missle, weaponEnd.position, weaponEnd.rotation);
+            shootCooldown = shootInterval;
+        }
+        else
+        {
+            shootCooldown -= Time.deltaTime;
+            if (shootCooldown < 0) shootCooldown = 0;
         }
     }
 }
