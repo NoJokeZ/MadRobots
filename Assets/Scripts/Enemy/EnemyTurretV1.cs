@@ -8,82 +8,47 @@ using UnityEngine.UIElements;
 
 public class EnemyTurretV1 : EnemyBehavior
 {
-
+    //GameObjects and components
     private Transform upperBody;
     private Transform weapon;
     private Transform weaponEnd;
 
-    private float rotateSmoothness = 20f;
-    private float rotateWeaponSmothness = 30f;
-
-    private float detectionRange = 10f;
-
-    private float startShootAngle = 20f;
-
-    private int playerLayerMaskIndex;
-
-    bool playerDetected = false;
-    bool playerOnceSeen = false;
-    bool startShoot = false;
-
-    private Vector3 playerDirection;
-    private Vector3 playerLastSeenPostion;
-    private Vector3 lookDirection;
-
-    private float shootInterval = 2f;
-    private float shootCooldown;
-
-    private GameObject projectile;
 
     protected override void Awake()
     {
         base.Awake();
-        HealtPoints = 10;
+        HealtPoints = 15;
         upperBody = transform.Find("Body2");
         weapon = transform.Find("Body2/Weapon");
         weaponEnd = transform.Find("Body2/Weapon/WeaponEnd");
-        playerLayerMaskIndex = LayerMask.NameToLayer("Player");
         projectile = Resources.Load<GameObject>("EnemyeProjectile1");
     }
 
     protected override void Update()
     {
         base.Update();
-        CheckCanSeePlayer();
-        if (playerOnceSeen)
-        {
-            RotateTowardsPlayer();
-        }
-        
-        if (playerDetected)
-        {
-            CheckShouldShoot();
-        }
-
-        if (startShoot)
-        {
-            Shoot();
-        }
-
     }
 
-
-    private void RotateTowardsPlayer()
+    /// <summary>
+    /// Rotated upper body and weapon towards the player 
+    /// </summary>
+    protected override void RotateTowardsPlayer()
     {
+        //Rotation of upper body towards player
         Vector3 direction = (playerLastSeenPostion - upperBody.position).normalized;
-
         float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         Quaternion newDirection = Quaternion.AngleAxis(angle, Vector3.up);
         upperBody.rotation = Quaternion.RotateTowards(upperBody.rotation, newDirection, rotateSmoothness * Time.deltaTime);
 
-        float angle2 = Mathf.Atan2(direction.y, direction.z) * Mathf.Rad2Deg;
-        Quaternion newDirection2 = Quaternion.AngleAxis(angle2, Vector3.left);
+        //Rotation of weapon towards player
+        Vector3 direction2 = (playerLastSeenPostion - weapon.position).normalized;
+        Quaternion newDirection2 = Quaternion.LookRotation(direction2, Vector3.up);
         weapon.rotation = Quaternion.RotateTowards(weapon.rotation, newDirection2, rotateWeaponSmothness * Time.deltaTime);
         weapon.eulerAngles = new Vector3(weapon.eulerAngles.x, upperBody.eulerAngles.y, upperBody.eulerAngles.z);
 
     }
 
-    private void CheckCanSeePlayer()
+    protected override void CheckCanSeePlayer()
     {
         playerDirection = (player.transform.position - upperBody.position).normalized;
         Debug.DrawRay(upperBody.position, playerDirection * detectionRange, Color.red);
@@ -103,9 +68,9 @@ public class EnemyTurretV1 : EnemyBehavior
             startShoot = false;
         }
     }
-    private void CheckShouldShoot()
+    protected override void CheckShouldShoot()
     {
-        lookDirection = upperBody.transform.forward;
+        Vector3 lookDirection = weapon.transform.forward;
         float angle = Vector3.Angle(lookDirection, playerDirection);
 
         if (angle <= startShootAngle)
@@ -118,7 +83,7 @@ public class EnemyTurretV1 : EnemyBehavior
         }
     }
 
-    private void Shoot()
+    protected override void Shoot()
     {
         if (shootCooldown == 0)
         {
