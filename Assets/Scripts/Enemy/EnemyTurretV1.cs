@@ -30,10 +30,10 @@ public class EnemyTurretV1 : EnemyBehavior
     private Vector3 playerLastSeenPostion;
     private Vector3 lookDirection;
 
-    private float shootInterval;
+    private float shootInterval = 2f;
     private float shootCooldown;
 
-    private GameObject missle;
+    private GameObject projectile;
 
     protected override void Awake()
     {
@@ -43,7 +43,7 @@ public class EnemyTurretV1 : EnemyBehavior
         weapon = transform.Find("Body2/Weapon");
         weaponEnd = transform.Find("Body2/Weapon/WeaponEnd");
         playerLayerMaskIndex = LayerMask.NameToLayer("Player");
-        missle = Resources.Load<GameObject>("Missle");
+        projectile = Resources.Load<GameObject>("EnemyeProjectile1");
     }
 
     protected override void Update()
@@ -100,6 +100,7 @@ public class EnemyTurretV1 : EnemyBehavior
         else
         {
             playerDetected = false;
+            startShoot = false;
         }
     }
     private void CheckShouldShoot()
@@ -121,8 +122,9 @@ public class EnemyTurretV1 : EnemyBehavior
     {
         if (shootCooldown == 0)
         {
-            Instantiate(missle, weaponEnd.position, weaponEnd.rotation);
+            Instantiate(projectile, weaponEnd.position, weaponEnd.rotation);
             shootCooldown = shootInterval;
+            
         }
         else
         {
