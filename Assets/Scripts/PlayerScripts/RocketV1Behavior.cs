@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class RocketV1Behavior : PlayerBehavior
 {
@@ -16,6 +17,9 @@ public class RocketV1Behavior : PlayerBehavior
     private Transform weaponsFPSave;
     private Quaternion weaponsUp;
     private Quaternion weaponsDown;
+
+    public float moveDirectionZ;
+    public float moveDirectionX;
 
 
     protected override void Awake()
@@ -43,6 +47,10 @@ public class RocketV1Behavior : PlayerBehavior
         {
             StartCoroutine(RotateWeaponsToFP());
         }
+
+        //Debug
+        moveDirectionZ = move.ReadValue<Vector2>().y;
+        moveDirectionX = move.ReadValue<Vector2>().x;
 
     }
 

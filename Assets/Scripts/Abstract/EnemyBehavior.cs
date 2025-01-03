@@ -23,19 +23,25 @@ public abstract class EnemyBehavior : MonoBehaviour
     protected bool startShoot = false;
     protected int playerLayerMaskIndex;
 
-    //Rotateion behavior
+    //Rotation behavior
     protected float rotateSmoothness = 20f;
     protected float rotateWeaponSmothness = 30f;
+
+    //Movement values
+    protected float moveSpeed = 3f;
+    protected float acceleration = 5f;
 
 
     //Gameobjects and components
     protected GameObject player { get; private set; }
     protected GameObject projectile;
+    protected Rigidbody rb;
 
 
     protected virtual void Awake()
     {
         player = GameObject.FindWithTag("Player");
+        rb = GetComponent<Rigidbody>();
         playerLayerMaskIndex = LayerMask.NameToLayer("Player");
     }
 
