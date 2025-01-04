@@ -37,6 +37,7 @@ public class EnemyTankV1 : EnemyBehavior
 
     private enum AttackState
     {
+        stand,
         follow,
         strave,
         backup
@@ -92,15 +93,18 @@ public class EnemyTankV1 : EnemyBehavior
 
             switch(currentAttackState)
             {
-                case 0: //follow
+                case 0: //still
+                    velocity = rb.velocity;
+                    break;
+                case 1: //follow
                     Follow();
                     break;
 
-                case 1: //strave
+                case 2: //strave
                     Strave();
                     break;
 
-                case 2: //backup
+                case 3: //backup
                     BackUp();
                     break;
             }

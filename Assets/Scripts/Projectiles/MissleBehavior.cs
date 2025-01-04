@@ -7,7 +7,6 @@ public class MissleBehavior : ProjectileBehavior
 
     private bool collided = false;
 
-    private Vector3 velocity;
     private bool dropOff = false;
     private Vector3 startPosition;
 
@@ -33,11 +32,8 @@ public class MissleBehavior : ProjectileBehavior
     {
         base.Update();
 
-        Trajectory();
-
         DropOffCheck();
 
-        rb.velocity = velocity;
     }
 
     /// <summary>
@@ -75,7 +71,7 @@ public class MissleBehavior : ProjectileBehavior
     /// <summary>
     /// Porjectile trajectory calucaltion
     /// </summary>
-    private void Trajectory()
+    protected override void Trajectory()
     {
         Vector3 trajectoryDirection = Quaternion.Euler(transform.eulerAngles) * Vector3.forward;
 

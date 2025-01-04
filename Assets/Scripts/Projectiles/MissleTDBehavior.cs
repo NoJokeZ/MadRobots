@@ -7,8 +7,6 @@ public class MissleTDBehavior : ProjectileBehavior
 
     private bool collided = false;
 
-    private Vector3 velocity;
-
     private bool targetMouse = false;
     private Vector3 startPosition;
     private float targetMouseDistance = 4f;
@@ -37,13 +35,10 @@ public class MissleTDBehavior : ProjectileBehavior
     {
         base.Update();
 
-        Trajectory();
         FollowTargetCheck();
-
-        rb.velocity = velocity;
     }
 
-    private void Trajectory()
+    protected override void Trajectory()
     {
         Vector3 trajectoryDirection = Quaternion.Euler(transform.eulerAngles) * Vector3.forward;
 

@@ -9,6 +9,8 @@ public abstract class ProjectileBehavior : MonoBehaviour
     public float LifeSpan { get; protected set; }
     public int Damage { get; protected set; }
 
+    protected Vector3 velocity;
+
     //Gameobjects and components
     protected Rigidbody rb;
 
@@ -21,6 +23,10 @@ public abstract class ProjectileBehavior : MonoBehaviour
     protected virtual void Update()
     {
         LifeSpanCheck();
+
+        Trajectory();
+
+        rb.velocity = velocity;
     }
 
     /// <summary>
@@ -34,5 +40,12 @@ public abstract class ProjectileBehavior : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    protected virtual void Trajectory()
+    {
+        Vector3 trajectoryDirection = Quaternion.Euler(transform.eulerAngles) * Vector3.forward;
+
+        velocity = trajectoryDirection * ProjectileSpeed;
     }
 }

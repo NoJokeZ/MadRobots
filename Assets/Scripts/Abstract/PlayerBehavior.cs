@@ -6,6 +6,11 @@ public abstract class PlayerBehavior : MonoBehaviour
     //Healthpoints
     protected int healthPoints = 20;
 
+    //Damage values
+    private bool isInvincible = false;
+    private float invincibleTime = 0.50f;
+    private float invincibleCounter = 0f;
+
     //Movement behavior values
     protected float moveSpeed = 5f;
     protected float groundAcceleration = 10f;
@@ -164,4 +169,56 @@ public abstract class PlayerBehavior : MonoBehaviour
             if (jetPackDuration < 0) jetPackDuration = 0; //no values underneat 0 for fuel display
         }
     }
+
+    /// <summary>
+    /// Check for projectile hits
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("Projectile") && !isInvincible)
+        {
+            isInvincible = true;
+            invincibleCounter = invincibleTime;
+            int damage = collision.gameObject.GetComponent<ProjectileBehavior>().Damage;
+            TakeDamage(damage);
+        }
+    }
+
+    /// <summary>
+    /// Check for explosion hits
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.CompareTag("Explosion") && !isInvincible)
+        {
+            isInvincible = true;
+            invincibleCounter = invincibleTime;
+
+            int damage = other.gameObject.GetComponent<ExplosionBehavior>().Damage;
+            TakeDamage(damage);
+        }
+    }
+
+    /// <summary>
+    /// Default take damage
+    /// </summary>
+    /// <param name="damage"></param>
+    protected virtual void TakeDamage(int damage)
+    {
+        healthPoints -= damage;
+    }
+
+    /// <summary>
+    /// Checks HP and destroys itself if 0 or less
+    /// </summary>
+    private void CheckHP()
+    {
+        if (healthPoints <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
 }
