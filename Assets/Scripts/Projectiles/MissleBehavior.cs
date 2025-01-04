@@ -40,7 +40,7 @@ public class MissleBehavior : ProjectileBehavior
     /// Creates explostion on impact
     /// </summary>
     /// <param name="collision"></param>
-    private void OnCollisionEnter(Collision collision)
+    protected override void OnCollisionEnter(Collision collision)
     {
         if (!collided)
         {

@@ -84,7 +84,7 @@ public class MissleTDBehavior : ProjectileBehavior
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected override void OnCollisionEnter(Collision collision)
     {
         if (!collided)
         {

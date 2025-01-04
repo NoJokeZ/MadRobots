@@ -1,6 +1,5 @@
-using UnityEngine;
 using System.Collections;
-using UnityEngine.EventSystems;
+using UnityEngine;
 
 public class RocketV1Behavior : PlayerBehavior
 {
@@ -98,7 +97,7 @@ public class RocketV1Behavior : PlayerBehavior
     {
 
         //weaponsFPSave.rotation = weapons.rotation; //maybe need this
-        
+
         float t = 0f;
 
         //Transition

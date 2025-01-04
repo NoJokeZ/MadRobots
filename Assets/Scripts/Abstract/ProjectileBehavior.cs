@@ -48,4 +48,9 @@ public abstract class ProjectileBehavior : MonoBehaviour
 
         velocity = trajectoryDirection * ProjectileSpeed;
     }
+
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+        Destroy(gameObject);
+    }
 }

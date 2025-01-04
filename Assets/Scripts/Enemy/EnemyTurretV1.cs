@@ -1,10 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class EnemyTurretV1 : EnemyBehavior
 {
@@ -50,17 +44,21 @@ public class EnemyTurretV1 : EnemyBehavior
 
     protected override void CheckCanSeePlayer()
     {
-        playerDirection = (player.transform.position - upperBody.position).normalized;
+
+        if (player != null)
+        {
+            playerDirection = (player.transform.position - transform.position).normalized;
+        }
         Debug.DrawRay(upperBody.position, playerDirection * detectionRange, Color.red);
 
         if (Physics.Raycast(upperBody.position, playerDirection, out RaycastHit hitInfo, detectionRange, ~LayerMask.GetMask("Enemy")))
         {
             if (hitInfo.transform.gameObject.layer == playerLayerMaskIndex)
-                {
-                    playerDetected = true;
-                    playerOnceSeen = true;
-                    playerLastSeenPostion = hitInfo.transform.position;
-                }
+            {
+                playerDetected = true;
+                playerOnceSeen = true;
+                playerLastSeenPostion = hitInfo.transform.position;
+            }
         }
         else
         {
@@ -89,7 +87,7 @@ public class EnemyTurretV1 : EnemyBehavior
         {
             Instantiate(projectile, weaponEnd.position, weaponEnd.rotation);
             shootCooldown = shootInterval;
-            
+
         }
         else
         {

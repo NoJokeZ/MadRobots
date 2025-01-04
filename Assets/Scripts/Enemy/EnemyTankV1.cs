@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class EnemyTankV1 : EnemyBehavior
@@ -71,7 +68,7 @@ public class EnemyTankV1 : EnemyBehavior
 
         if (!playerDetected)
         {
-            switch(currentIdleState)
+            switch (currentIdleState)
             {
                 case 0: //idle
                     velocity = rb.velocity;
@@ -91,7 +88,7 @@ public class EnemyTankV1 : EnemyBehavior
         {
             RotateLowerTowardsPlayer();
 
-            switch(currentAttackState)
+            switch (currentAttackState)
             {
                 case 0: //still
                     velocity = rb.velocity;
@@ -156,7 +153,7 @@ public class EnemyTankV1 : EnemyBehavior
 
     private void BackUp()
     {
-        Vector3 moveDirection =  lowerBody.forward;
+        Vector3 moveDirection = lowerBody.forward;
 
         velocity.x = Mathf.Lerp(velocity.x, -moveDirection.x * moveSpeed, acceleration * Time.deltaTime);
         velocity.z = Mathf.Lerp(velocity.z, -moveDirection.z * moveSpeed, acceleration * Time.deltaTime);
@@ -173,7 +170,7 @@ public class EnemyTankV1 : EnemyBehavior
 
     private void ChooseIdleState()
     {
-        if(idleStateCooldown <= 0)
+        if (idleStateCooldown <= 0)
         {
             idleStateCooldown = UnityEngine.Random.Range(minIdleStateCooldown, maxIdleStateCooldown);
             currentIdleState = UnityEngine.Random.Range(0, Enum.GetNames(typeof(IdleState)).Length);
@@ -216,7 +213,7 @@ public class EnemyTankV1 : EnemyBehavior
     private void ChooseLeftRightStrave()
     {
         leftRight = UnityEngine.Random.Range(0, 2);
-    }    
+    }
 
 
 
@@ -236,7 +233,13 @@ public class EnemyTankV1 : EnemyBehavior
 
     protected override void CheckCanSeePlayer()
     {
-        playerDirection = (player.transform.position - upperBody.position).normalized;
+
+
+
+        if (player != null)
+        {
+            playerDirection = (player.transform.position - transform.position).normalized;
+        }
         Debug.DrawRay(upperBody.position, playerDirection * detectionRange, Color.red);
 
         if (Physics.Raycast(upperBody.position, playerDirection, out RaycastHit hitInfo, detectionRange, ~LayerMask.GetMask("Enemy")))
@@ -276,7 +279,7 @@ public class EnemyTankV1 : EnemyBehavior
         {
             Instantiate(projectile, weaponEnd.position, weaponEnd.rotation);
             shotCount++;
-            if(shotCount < burstShots)
+            if (shotCount < burstShots)
             {
                 shootCooldown = burstShootCooldown;
             }

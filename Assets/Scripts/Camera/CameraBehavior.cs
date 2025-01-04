@@ -35,6 +35,8 @@ public class CameraBehavior : MonoBehaviour
     private Vector2 cursorPivot;
 
 
+    private bool isPlayerAlive = false;
+
     private void Awake()
     {
         //Input
@@ -43,12 +45,7 @@ public class CameraBehavior : MonoBehaviour
         topDownAbility = gameInput.Player.TopDownAbility;
 
         //Gameobjects and components
-        player = GameObject.FindWithTag("Player");
-        playerBehavior = player.GetComponent<PlayerBehavior>();
-
-        //Get camera positions
-        fPCameraTransform = player.transform.Find("FPCameraLocation");
-        tDCameraTransform = player.transform.Find("TDCameraLocation");
+        GetPlayerObjects();
 
         //Set cursor properties
         Cursor.lockState = CursorLockMode.Locked;
@@ -72,28 +69,35 @@ public class CameraBehavior : MonoBehaviour
 
     private void Update()
     {
-        //Transition handling
-        if (topDownAbility.WasPressedThisFrame() && !IsTopDown && !IsTransitionOngoing)
+        if (isPlayerAlive)
         {
-            StartCoroutine(TransitionToTD());
+            //Transition handling
+            if (topDownAbility.WasPressedThisFrame() && !IsTopDown && !IsTransitionOngoing)
+            {
+                StartCoroutine(TransitionToTD());
+            }
+            else if (topDownAbility.WasPressedThisFrame() && IsTopDown && !IsTransitionOngoing)
+            {
+                StartCoroutine(TransitionToFP());
+            }
+
+            //Camera follow and movement handling
+            if (IsTopDown && !IsTransitionOngoing)
+            {
+                CameraTopDownFollow();
+            }
+            else if (!IsTopDown && !IsTransitionOngoing)
+            {
+                //CameraFirsPersonFollow();
+                FPCameraMovement();
+            }
         }
-        else if (topDownAbility.WasPressedThisFrame() && IsTopDown && !IsTransitionOngoing)
+        else
         {
-            StartCoroutine(TransitionToFP());
+            GetPlayerObjects();
         }
 
-        //Camera follow and movement handling
-        if (IsTopDown && !IsTransitionOngoing)
-        {
-            CameraTopDownFollow();
-        }
-        else if (!IsTopDown && !IsTransitionOngoing)
-        {
-            //CameraFirsPersonFollow();
-            FPCameraMovement();
-        }
 
-        
 
         //Debug.Log(fPCameraTransform.transform.position);
         //Debug.Log(fPCameraTransform.transform.rotation);
@@ -102,9 +106,12 @@ public class CameraBehavior : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (!IsTopDown && !IsTransitionOngoing)
+        if (isPlayerAlive)
         {
-            CameraFirsPersonFollow();
+            if (!IsTopDown && !IsTransitionOngoing)
+            {
+                CameraFirsPersonFollow();
+            }
         }
     }
 
@@ -156,9 +163,9 @@ public class CameraBehavior : MonoBehaviour
         Vector3 newCameraPosition = Vector3.MoveTowards(transform.position, mousePosition, topDownFollowSpeed);
         newCameraPosition.y = tDCameraTransform.position.y;
         transform.position = newCameraPosition;
-        
 
-        
+
+
     }
 
 
@@ -226,5 +233,32 @@ public class CameraBehavior : MonoBehaviour
 
         //Crosshair visible
         crosshairMaterial.color = Color.white;
+    }
+
+    public void ResetOnPlayerDeath()
+    {
+        IsTopDown = false;
+        IsTransitionOngoing = false;
+        isPlayerAlive = false;
+    }
+
+    private void GetPlayerObjects()
+    {
+        player = GameObject.FindWithTag("Player");
+
+        if (player != null)
+        {
+            playerBehavior = player.GetComponent<PlayerBehavior>();
+
+            fPCameraTransform = player.transform.Find("FPCameraLocation");
+            tDCameraTransform = player.transform.Find("TDCameraLocation");
+
+            isPlayerAlive = true;
+        }
+        else
+        {
+            isPlayerAlive = false;
+        }
+
     }
 }

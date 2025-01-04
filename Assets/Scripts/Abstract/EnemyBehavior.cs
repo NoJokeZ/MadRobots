@@ -34,19 +34,28 @@ public abstract class EnemyBehavior : MonoBehaviour
 
     //Gameobjects and components
     protected GameObject player { get; private set; }
+    protected GameManager gameManager;
+    protected bool isPlayerAlive;
+    private bool hasPlayerData = false;
     protected GameObject projectile;
     protected Rigidbody rb;
 
 
     protected virtual void Awake()
     {
-        player = GameObject.FindWithTag("Player");
+        GetPlayerObjects();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         rb = GetComponent<Rigidbody>();
         playerLayerMaskIndex = LayerMask.NameToLayer("Player");
     }
 
     protected virtual void Update()
     {
+
+        if (player == null)
+        {
+            GetPlayerObjects();
+        }
         //HP and damage checks
         CheckHP();
         if (isExplosionDamageDelay)
@@ -136,11 +145,13 @@ public abstract class EnemyBehavior : MonoBehaviour
     /// </summary>
     protected virtual void RotateTowardsPlayer()
     {
+
         Vector3 direction = (playerLastSeenPostion - transform.position).normalized;
 
         float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         Quaternion newDirection = Quaternion.AngleAxis(angle, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, newDirection, rotateSmoothness * Time.deltaTime);
+
     }
 
     /// <summary>
@@ -148,7 +159,11 @@ public abstract class EnemyBehavior : MonoBehaviour
     /// </summary>
     protected virtual void CheckCanSeePlayer()
     {
+
+        if (player != null)
+        {
         playerDirection = (player.transform.position - transform.position).normalized;
+        }
         //Debug.DrawRay(transform.position, playerDirection * detectionRange, Color.red); //Debug
 
         if (Physics.Raycast(transform.position, playerDirection, out RaycastHit hitInfo, detectionRange, ~LayerMask.GetMask("Enemy")))
@@ -201,5 +216,20 @@ public abstract class EnemyBehavior : MonoBehaviour
             shootCooldown -= Time.deltaTime;
             if (shootCooldown < 0) shootCooldown = 0;
         }
+    }
+
+    private void GetPlayerObjects()
+    {
+        player = GameObject.FindWithTag("Player");
+
+        if (player != null)
+        {
+            hasPlayerData = true;
+        }
+        else
+        {
+            hasPlayerData = false;
+        }
+
     }
 }

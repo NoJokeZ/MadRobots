@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public abstract class PlayerBehavior : MonoBehaviour
@@ -45,7 +46,10 @@ public abstract class PlayerBehavior : MonoBehaviour
     protected GameObject weaponEnds;
     protected Transform[] barrels;
     protected int barrelsIndex = 1; //because 0 is always the parent object of the barrels. thanks unity...
+    private GameManager gameManager;
 
+    //Events
+    private UnityEvent onDeath;
 
     protected virtual void Awake()
     {
@@ -63,6 +67,13 @@ public abstract class PlayerBehavior : MonoBehaviour
         cameraBehavior = Camera.main.GetComponent<CameraBehavior>();
         weaponEnds = transform.Find("UpperBody/Weapons/WeaponEnds").gameObject;
         barrels = weaponEnds.GetComponentsInChildren<Transform>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+
+        //Events
+        onDeath = new UnityEvent();
+        onDeath.AddListener(cameraBehavior.ResetOnPlayerDeath);
+        onDeath.AddListener(gameManager.OnPlayerDeath);
 
     }
 
@@ -105,6 +116,8 @@ public abstract class PlayerBehavior : MonoBehaviour
         {
             velocity = rb.velocity; //Needed so that velocity is still beeing updated even if movement is locked
         }
+
+        DestroyOnWorldExit();
 
     }
 
@@ -219,6 +232,19 @@ public abstract class PlayerBehavior : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void DestroyOnWorldExit()
+    {
+        if (transform.position.y <= -20)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        onDeath.Invoke();
     }
 
 }
