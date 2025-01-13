@@ -36,7 +36,6 @@ public abstract class EnemyBehavior : MonoBehaviour
     protected GameObject player { get; private set; }
     protected GameManager gameManager;
     protected bool isPlayerAlive;
-    private bool hasPlayerData = false;
     protected GameObject projectile;
     protected Rigidbody rb;
 
@@ -162,7 +161,7 @@ public abstract class EnemyBehavior : MonoBehaviour
 
         if (player != null)
         {
-        playerDirection = (player.transform.position - transform.position).normalized;
+            playerDirection = (player.transform.position - transform.position).normalized;
         }
         //Debug.DrawRay(transform.position, playerDirection * detectionRange, Color.red); //Debug
 
@@ -221,15 +220,5 @@ public abstract class EnemyBehavior : MonoBehaviour
     private void GetPlayerObjects()
     {
         player = GameObject.FindWithTag("Player");
-
-        if (player != null)
-        {
-            hasPlayerData = true;
-        }
-        else
-        {
-            hasPlayerData = false;
-        }
-
     }
 }

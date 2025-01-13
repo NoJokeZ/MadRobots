@@ -27,6 +27,7 @@ public class MissleTDBehavior : ProjectileBehavior
         //Missle values
         ProjectileSpeed = 6f;
         LifeSpan = 40f;
+        Damage = UpgradeManager.Instance.PlayerMissleDamage;
 
         GetTargetLocation();
     }

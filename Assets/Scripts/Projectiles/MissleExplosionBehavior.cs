@@ -5,6 +5,6 @@ public class MissleExplosionBehavior : ExplosionBehavior
     {
         base.Awake();
         lifeSpan = 0.5f;
-        Damage = 5;
+        Damage = UpgradeManager.Instance.PlayerExplosionDamage;
     }
 }

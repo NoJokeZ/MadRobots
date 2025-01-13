@@ -25,6 +25,8 @@ public class RocketV1Behavior : PlayerBehavior
     {
         base.Awake();
 
+        myType = PlayerType.Rocket;
+
         missle = Resources.Load<GameObject>("Missle");
         missleTD = Resources.Load<GameObject>("missleTD");
 

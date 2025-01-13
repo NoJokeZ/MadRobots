@@ -23,7 +23,7 @@ public class MissleBehavior : ProjectileBehavior
         DropOffDistance = 20f;
         DropOffSpeed = 0.06f;
         LifeSpan = 20f;
-        Damage = 1;
+        Damage = UpgradeManager.Instance.PlayerMissleDamage;
 
     }
 

@@ -4,13 +4,32 @@ using UnityEngine.InputSystem;
 
 public abstract class PlayerBehavior : MonoBehaviour
 {
+    public enum PlayerType
+    {
+        Universal,
+        Rocket
+    }
+
+    public PlayerType myType { get; protected set; }
+
     //Healthpoints
-    protected int healthPoints = 20;
+    protected int healthPoints;
+
+    //Armor
+    protected int bulletArmorPoints;
+    protected int explosionArmorPoints;
 
     //Damage values
     private bool isInvincible = false;
     private float invincibleTime = 0.50f;
     private float invincibleCounter = 0f;
+
+    protected enum DamageType
+    {
+        Bullet,
+        Explosion,
+        Melee
+    }
 
     //Movement behavior values
     protected float moveSpeed = 5f;
@@ -85,6 +104,7 @@ public abstract class PlayerBehavior : MonoBehaviour
         topDownAbility.Enable();
         shoot.Enable();
 
+        GetPlayerStats();
     }
 
     protected void OnDisable()
@@ -194,7 +214,7 @@ public abstract class PlayerBehavior : MonoBehaviour
             isInvincible = true;
             invincibleCounter = invincibleTime;
             int damage = collision.gameObject.GetComponent<ProjectileBehavior>().Damage;
-            TakeDamage(damage);
+            TakeDamage(damage, DamageType.Bullet);
         }
     }
 
@@ -210,7 +230,7 @@ public abstract class PlayerBehavior : MonoBehaviour
             invincibleCounter = invincibleTime;
 
             int damage = other.gameObject.GetComponent<ExplosionBehavior>().Damage;
-            TakeDamage(damage);
+            TakeDamage(damage, DamageType.Explosion);
         }
     }
 
@@ -218,9 +238,34 @@ public abstract class PlayerBehavior : MonoBehaviour
     /// Default take damage
     /// </summary>
     /// <param name="damage"></param>
-    protected virtual void TakeDamage(int damage)
+    protected virtual void TakeDamage(int damage, DamageType damageType)
     {
-        healthPoints -= damage;
+        if (damageType.Equals(DamageType.Bullet))
+        {
+            damage -= bulletArmorPoints;
+            if (damage <= 0)
+            {
+                //Bullet blocked -> UI
+            }
+            else
+            {
+                //Bullet hit -> UI
+                healthPoints -= damage;
+            }
+        }
+        else if (damageType.Equals(DamageType.Explosion))
+        {
+            damage -= explosionArmorPoints;
+            if (damage <= 0)
+            {
+                //Explosion blocked -> UI
+            }
+            else
+            {
+                //Explosion hit -> UI
+                healthPoints -= damage;
+            }
+        }
     }
 
     /// <summary>
@@ -245,6 +290,24 @@ public abstract class PlayerBehavior : MonoBehaviour
     private void OnDestroy()
     {
         onDeath.Invoke();
+    }
+
+    private void GetPlayerStats()
+    {
+        //Get Values
+        //Healthpoints
+        healthPoints = UpgradeManager.Instance.PlayerHealth;
+
+        //Armor
+        bulletArmorPoints = UpgradeManager.Instance.PlayerBulletArmorPoints;
+        explosionArmorPoints = UpgradeManager.Instance.PlayerExplosionArmorPoints;
+
+        //Movement behavior values
+        moveSpeed = UpgradeManager.Instance.PlayerMoveSpeed;
+        groundAcceleration = UpgradeManager.Instance.PlayerGroundAcceleration;
+        airAcceleration = UpgradeManager.Instance.PlayerAirAcceleration;
+        jetPackPower = UpgradeManager.Instance.PlayerJetPackPower;
+        jetPackMaxDuration = UpgradeManager.Instance.PlayerJetPackMaxDuration;
     }
 
 }

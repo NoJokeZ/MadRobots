@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour
     private GameObject player;
     private Transform playerSpawn;
     private GameObject ChosenPlayerPrefab;
-    public bool isPlayerAlive { get; private set; } = false;
+    public bool IsPlayerAlive { get; private set; } = false;
 
     private void Awake()
     {
@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!isPlayerAlive)
+        if (!IsPlayerAlive)
         {
             SpawnPlayer();
         }
@@ -26,11 +26,11 @@ public class GameManager : MonoBehaviour
     {
         Instantiate(ChosenPlayerPrefab, playerSpawn.position, playerSpawn.rotation);
 
-        isPlayerAlive = true;
+        IsPlayerAlive = true;
     }
 
     public void OnPlayerDeath()
     {
-        isPlayerAlive = false;
+        IsPlayerAlive = false;
     }
 }
