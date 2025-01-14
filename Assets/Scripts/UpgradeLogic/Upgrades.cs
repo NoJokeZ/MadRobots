@@ -12,6 +12,7 @@ public class Upgrade : ScriptableObject
     public PlayerBehavior.PlayerType PlayerType;
     public UpgradeRarity Rarity;
     public UpgradeType Type;
+    public bool IsStackable;
     public float AddValue;
     public float AmplifyValue;
     public bool ActivateValue;

@@ -78,7 +78,7 @@ public class UpgradeManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        //GetUpgradeObjects();
+        playerResetPosition = upgradeObject.transform.Find("PlayerResetPosition");
     }
 
     private void Update()
@@ -98,13 +98,6 @@ public class UpgradeManager : MonoBehaviour
             playerBehavior = player.GetComponent<PlayerBehavior>();
             playerType = playerBehavior.myType;
         }
-    }
-
-    private void GetUpgradeObjects()
-    {
-        upgradeObject = GameObject.Find("UpgradeObject");
-
-        playerResetPosition = upgradeObject.transform.Find("PlayerResetPosition");
     }
 
     private void GetAvailableUpgrades()
@@ -184,6 +177,27 @@ public class UpgradeManager : MonoBehaviour
 
         UpgradeEvent = new UnityEvent();
         
+        for (int i = 0; i < upgrades.Length; i++)
+        {
+            if (upgrades[i].IsStackable)
+            {
+                switch (upgrades[i].Rarity)
+                {
+                    case UpgradeRarity.Common:
+                        availableCommonUpgrades.Add(upgrades[i]);
+                        break;
+                    case UpgradeRarity.Rare:
+                        availableRareUpgrades.Add(upgrades[i]);
+                        break;
+                    case UpgradeRarity.Legendary:
+                        availableLegendaryUpgrades.Add(upgrades[i]);
+                        break;
+                }
+            }
+
+            upgrades[i] = null;
+
+        }
     }
 
     public void DamageUP()
