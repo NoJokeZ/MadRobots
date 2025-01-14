@@ -1,0 +1,52 @@
+ToDo:
+
++In top down slight camera movement towared mouse in a small circle around the player
+
++Player segmentation
+
++Enemy AI (+Stationary Turret / +Moving Towards player)
+
++Player can get damage
++Player Destroy logic / OnDestroy -> Resett Camera values
+
+Upgrade Logic Upgrades (Mehr Upgrades + Logic zum  testen einbauen und testen)
+
+EnemyAi advancen (Wall detection)
+
+Asset-Moddeling (Player, Maps, Upgrades)
+
+Menu and Gameplay-Loop
+
+UI
+
+Second Player
+-> Choose Player logic
+
+Second player Upgrades
+
+Assets for second player
+
+Maps and enemies
+
+
+
+
+(Ladebalken einzelne Ladeschritte haben bool und wenn fertig is bool true und dann ladebalken weiter (Banger Idee oder?))
+
+
+
+
+Upgrades
+DamageUp
+MovemnetUp
+FirerateUp
+HealthUp
+HealthRegenerationUp
+ArmorUp
+BulletArmorUp
+ExplosionArmorUp
+
+ExplosionRadiusUp
+Targetet-Ammunition Up
+DoubleExplosion
+GroundBurn
