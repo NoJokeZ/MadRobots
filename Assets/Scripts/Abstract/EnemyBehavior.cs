@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class EnemyBehavior : MonoBehaviour
 {
-    public int HealtPoints { get; protected set; } = 10;
+    public float HealtPoints { get; protected set; } = 10;
 
     //Explosion damage values
     private bool isExplosionDamageDelay = false;
@@ -82,7 +82,7 @@ public abstract class EnemyBehavior : MonoBehaviour
     /// Default take damage
     /// </summary>
     /// <param name="damage"></param>
-    protected virtual void TakeDamage(int damage)
+    protected virtual void TakeDamage(float damage)
     {
         HealtPoints -= damage;
     }
@@ -106,7 +106,7 @@ public abstract class EnemyBehavior : MonoBehaviour
     {
         if (collision.transform.CompareTag("Projectile"))
         {
-            int damage = collision.gameObject.GetComponent<ProjectileBehavior>().Damage;
+            float damage = collision.gameObject.GetComponent<ProjectileBehavior>().Damage;
             TakeDamage(damage);
         }
     }
@@ -122,7 +122,7 @@ public abstract class EnemyBehavior : MonoBehaviour
             isExplosionDamageDelay = true; //Needed so that explosions can't deal multiple damage if multiple bodyparts are hit
             explosionDamageDeleyCounter = explosionDamageDelayTime;
 
-            int damage = other.gameObject.GetComponent<ExplosionBehavior>().Damage;
+            float damage = other.gameObject.GetComponent<ExplosionBehavior>().Damage;
             TakeDamage(damage);
         }
     }

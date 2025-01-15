@@ -2,18 +2,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+public enum PlayerType
+{
+    Universal,
+    Rocket
+}
+
 public abstract class PlayerBehavior : MonoBehaviour
 {
-    public enum PlayerType
-    {
-        Universal,
-        Rocket
-    }
 
     public PlayerType myType { get; protected set; }
 
     //Healthpoints
-    protected int healthPoints;
+    protected float healthPoints;
 
     //Armor
     protected int bulletArmorPoints;
@@ -213,7 +214,7 @@ public abstract class PlayerBehavior : MonoBehaviour
         {
             isInvincible = true;
             invincibleCounter = invincibleTime;
-            int damage = collision.gameObject.GetComponent<ProjectileBehavior>().Damage;
+            float damage = collision.gameObject.GetComponent<ProjectileBehavior>().Damage;
             TakeDamage(damage, DamageType.Bullet);
         }
     }
@@ -229,7 +230,7 @@ public abstract class PlayerBehavior : MonoBehaviour
             isInvincible = true;
             invincibleCounter = invincibleTime;
 
-            int damage = other.gameObject.GetComponent<ExplosionBehavior>().Damage;
+            float damage = other.gameObject.GetComponent<ExplosionBehavior>().Damage;
             TakeDamage(damage, DamageType.Explosion);
         }
     }
@@ -238,7 +239,7 @@ public abstract class PlayerBehavior : MonoBehaviour
     /// Default take damage
     /// </summary>
     /// <param name="damage"></param>
-    protected virtual void TakeDamage(int damage, DamageType damageType)
+    protected virtual void TakeDamage(float damage, DamageType damageType)
     {
         if (damageType.Equals(DamageType.Bullet))
         {
@@ -296,7 +297,7 @@ public abstract class PlayerBehavior : MonoBehaviour
     {
         //Get Values
         //Healthpoints
-        healthPoints = UpgradeManager.Instance.PlayerHealth;
+        healthPoints = UpgradeManager.Instance.PlayerMaxHealth;
 
         //Armor
         bulletArmorPoints = UpgradeManager.Instance.PlayerBulletArmorPoints;

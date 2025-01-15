@@ -4,7 +4,7 @@ public abstract class ExplosionBehavior : MonoBehaviour
 {
 
     protected float lifeSpan;
-    public int Damage { get; protected set; }
+    public float Damage { get; protected set; }
 
 
     protected virtual void Awake()

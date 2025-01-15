@@ -11,7 +11,7 @@ public class UpgradeManager : MonoBehaviour
 
     private GameObject player;
     private PlayerBehavior playerBehavior;
-    private PlayerBehavior.PlayerType playerType;
+    public PlayerType CurrentPlayerType;
 
     private GameObject upgradeObject;
 
@@ -26,24 +26,25 @@ public class UpgradeManager : MonoBehaviour
 
     //Player Values
     //Player health
-    public int PlayerHealth { get; private set; } = 20;
+    public int PlayerMaxHealth = 20;
+
 
     //Player armor
-    public int PlayerBulletArmorPoints { get; private set; } = 2;
-    public int PlayerExplosionArmorPoints { get; private set; } = 2;
+    public int PlayerBulletArmorPoints = 2;
+    public int PlayerExplosionArmorPoints = 2;
 
     //Player movement
-    public float PlayerMoveSpeed { get; private set; } = 5f;
-    public float PlayerGroundAcceleration { get; private set; } = 10f;
-    public float PlayerAirAcceleration { get; private set; } = 2f;
-    public float PlayerJetPackPower { get; private set; } = 3f;
-    public float PlayerJetPackMaxDuration { get; private set; } = 3f;
+    public float PlayerMoveSpeed = 5f;
+    public float PlayerGroundAcceleration = 10f;
+    public float PlayerAirAcceleration = 2f;
+    public float PlayerJetPackPower = 3f;
+    public float PlayerJetPackMaxDuration = 3f;
 
     //Player damage
-    public int PlayerProjectileDamage { get; private set; } = 5;
-    public int PlayerMissleDamage { get; private set; } = 1;
-    public int PlayerExplosionDamage { get; private set; } = 5;
-    public float PlayerExplostionRadius { get; private set; } = 0.5f;
+    public float PlayerProjectileDamage = 5;
+    public float PlayerMissleDamage = 1;
+    public float PlayerExplosionDamage = 5;
+    public float PlayerExplostionRadius = 0.5f;
 
 
     //Upgrades
@@ -60,14 +61,6 @@ public class UpgradeManager : MonoBehaviour
 
     private void Awake()
     {
-        GetAvailableUpgrades();
-
-        if ( UpgradeEvent == null)
-        {
-            UpgradeEvent = new UnityEvent();
-        }
-
-
         if (Instance == null)
         {
             Instance = this;
@@ -77,6 +70,15 @@ public class UpgradeManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+        GetAvailableUpgrades();
+
+        if ( UpgradeEvent == null)
+        {
+            UpgradeEvent = new UnityEvent();
+        }
+
+        GetRandomUpgrade();
 
         playerResetPosition = upgradeObject.transform.Find("PlayerResetPosition");
     }
@@ -96,7 +98,7 @@ public class UpgradeManager : MonoBehaviour
         if (player != null)
         {
             playerBehavior = player.GetComponent<PlayerBehavior>();
-            playerType = playerBehavior.myType;
+            CurrentPlayerType = playerBehavior.myType;
         }
     }
 
@@ -108,7 +110,7 @@ public class UpgradeManager : MonoBehaviour
 
         foreach (Upgrade upgrade in allUpgrades)
         {
-            if (upgrade.PlayerType == PlayerBehavior.PlayerType.Universal && upgrade.PlayerType == playerType)
+            if (upgrade.PlayerType == PlayerType.Universal && upgrade.PlayerType == CurrentPlayerType)
             {
                 if (upgrade.Rarity == UpgradeRarity.Common)
                 {
@@ -200,14 +202,13 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    public void DamageUP()
-    {
-        PlayerExplosionDamage += 5;
-    }
-
     public void UpgradeSelected(Collider other,UpgradeSlot slot)
     {
         gameObject.AddComponent(upgrades[(int)slot].UpgradeScript.GetClass());
+
+        DoUpgrade();
+
+
     }
 }
 
