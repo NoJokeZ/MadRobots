@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87d8fa6d920a6794b996543c5ee62136, type: 3}
-  m_Name: DamageUp
+  m_Name: HealthUP
   m_EditorClassIdentifier: 
-  Name: Damage UP
-  Description: Damage + 5
+  Name: Health UP
+  Description: Health + 10
   PlayerType: 0
   Rarity: 0
   Type: 0
   IsStackable: 1
-  AddValue: 5
+  AddValue: 10
   AmplifyValue: 0
   ActivateValue: 0
-  UpgradeScript: {fileID: 11500000, guid: 0c0510ff73400704fbfabcc3ff6bb987, type: 3}
+  UpgradeScript: {fileID: 0}
   UpgradeSymbol: {fileID: 0}

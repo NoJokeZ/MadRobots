@@ -9,7 +9,9 @@ ToDo:
 +Player can get damage
 +Player Destroy logic / OnDestroy -> Resett Camera values
 
-Upgrade Logic Upgrades (Mehr Upgrades + Logic zum  testen einbauen und testen)
++Upgrade Logic Upgrades (Mehr Upgrades + Logic zum  testen einbauen und testen)
+
+(RocketV1 / TopDownAbility reworken wegen special ammo oder zeit?)
 
 EnemyAi advancen (Wall detection)
 
@@ -37,16 +39,18 @@ Maps and enemies
 
 
 Upgrades
-DamageUp
-MovemnetUp
-FirerateUp
-HealthUp
-HealthRegenerationUp
-ArmorUp
-BulletArmorUp
-ExplosionArmorUp
+++DamageUp
+++MovemnetUp
+++FirerateUp
+++HealthUp
+++HealthRegenerationUp
+++ArmorUp
+++BulletArmorUp
+++ExplosionArmorUp
 
-ExplosionRadiusUp
-Targetet-Ammunition Up
-DoubleExplosion
-GroundBurn
+++ExplosionRadiusUp
+
+WIP in player scrtipt:
+++Special Ability Ammunition Up
+++DoubleExplosion
+++NapalmRockets

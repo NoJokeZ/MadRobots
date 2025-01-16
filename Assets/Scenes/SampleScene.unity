@@ -2216,7 +2216,7 @@ Transform:
   m_GameObject: {fileID: 823789571}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.600871, y: 5.202196, z: -12.779734}
+  m_LocalPosition: {x: 0, y: 50, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2243,37 +2243,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 823789571}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e94e1908280db33468318f0ad541260b, type: 3}
+  m_Script: {fileID: 11500000, guid: 52be76ef3450da048b4e8f9242e700a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  playerBehavior: {fileID: 0}
-  playerType: 0
-  upgradeObject: {fileID: 0}
-  upgradeCollider1: {fileID: 0}
-  upgradeCollider2: {fileID: 0}
-  upgradeCollider3: {fileID: 0}
-  upgradeCollider4: {fileID: 0}
-  playerResetPosition: {fileID: 0}
-  <PlayerHealth>k__BackingField: 20
-  <PlayerBulletArmorPoints>k__BackingField: 2
-  <PlayerExplosionArmorPoints>k__BackingField: 2
-  <PlayerMoveSpeed>k__BackingField: 5
-  <PlayerGroundAcceleration>k__BackingField: 10
-  <PlayerAirAcceleration>k__BackingField: 2
-  <PlayerJetPackPower>k__BackingField: 3
-  <PlayerJetPackMaxDuration>k__BackingField: 3
-  <PlayerProjectileDamage>k__BackingField: 5
-  <PlayerMissleDamage>k__BackingField: 1
-  <PlayerExplosionDamage>k__BackingField: 5
-  <PlayerExplostionRadius>k__BackingField: 0.5
+  CurrentPlayerType: 0
   UpgradeEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_CallsDirty: 1
-  availableCommonUpgrades: []
-  availableRareUpgrades: []
-  availableLegendaryUpgrades: []
+  PlayerMaxHealth: 20
+  PlayerHealthRegeneration: 0
+  PlayerBulletArmorPoints: 2
+  PlayerExplosionArmorPoints: 2
+  PlayerMoveSpeed: 5
+  PlayerGroundAcceleration: 10
+  PlayerAirAcceleration: 2
+  PlayerJetPackPower: 3
+  PlayerJetPackMaxDuration: 3
+  PlayerProjectileDamage: 5
+  PlayerMissleDamage: 1
+  PlayerExplosionDamage: 5
+  PlayerExplosionRadius: 0.5
+  PlayerFirerate: 2
+  PlayerSpecialAbilityAmmo: 0
+  DoubleExplosion: 0
+  NapalmRockets: 0
 --- !u!1 &957266363
 GameObject:
   m_ObjectHideFlags: 0

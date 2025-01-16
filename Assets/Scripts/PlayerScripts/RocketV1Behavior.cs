@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class RocketV1Behavior : PlayerBehavior
 {
-    //Cooldown values
-    private float cooldown;
-    private float shootCooldown = 0.2f;
 
     //Bullet prefab
     private GameObject missle;
@@ -19,6 +16,11 @@ public class RocketV1Behavior : PlayerBehavior
 
     public float moveDirectionZ;
     public float moveDirectionX;
+
+    //Player specific stats and abitlies
+    private int targetedRocketAmmo;
+    private bool doubleExplosion = false;
+    private bool napalmRockets = false;
 
 
     protected override void Awake()
@@ -57,9 +59,9 @@ public class RocketV1Behavior : PlayerBehavior
 
     private void launchRocket()
     {
-        if (shoot.WasPressedThisFrame() && cooldown == 0f)
+        if (shoot.WasPressedThisFrame() && shootCooldown == 0f)
         {
-            cooldown = shootCooldown;
+            shootCooldown = firrate;
 
             Transform useBarrel = barrels[barrelsIndex];
             barrelsIndex++;
@@ -85,13 +87,13 @@ public class RocketV1Behavior : PlayerBehavior
 
     private void CooldownCountDown()
     {
-        if (cooldown > 0f)
+        if (shootCooldown > 0f)
         {
-            cooldown -= Time.deltaTime;
+            shootCooldown -= Time.deltaTime;
         }
         else
         {
-            cooldown = 0f;
+            shootCooldown = 0f;
         }
     }
 
@@ -129,6 +131,15 @@ public class RocketV1Behavior : PlayerBehavior
 
             yield return null;
         }
+    }
+
+    protected override void GetPlayerStats()
+    {
+        base.GetPlayerStats();
+
+        doubleExplosion = UpgradeManager.Instance.DoubleExplosion;
+        napalmRockets = UpgradeManager.Instance.NapalmRockets;
+
     }
 
 }

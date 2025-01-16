@@ -1,21 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro.EditorUtilities;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DamageUp : UpgradeScript
 {
-
-
+    
     protected override void Awake()
     {
-        base.Awake();
-
         UpgradeObject = Resources.Load<Upgrade>("UpgradeObjects/DamageUP");
-
-        upgradeManager.UpgradeEvent.AddListener(Upgrade);
-
-        Destroy(this);
+        
+        base.Awake();
+        
     }
 
     protected override void Upgrade()

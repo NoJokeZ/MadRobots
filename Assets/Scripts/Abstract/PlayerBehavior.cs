@@ -13,13 +13,6 @@ public abstract class PlayerBehavior : MonoBehaviour
 
     public PlayerType myType { get; protected set; }
 
-    //Healthpoints
-    protected float healthPoints;
-
-    //Armor
-    protected int bulletArmorPoints;
-    protected int explosionArmorPoints;
-
     //Damage values
     private bool isInvincible = false;
     private float invincibleTime = 0.50f;
@@ -32,14 +25,30 @@ public abstract class PlayerBehavior : MonoBehaviour
         Melee
     }
 
-    //Movement behavior values
-    protected float moveSpeed = 5f;
-    protected float groundAcceleration = 10f;
-    protected float airAcceleration = 2f;
-    protected float jetPackPower = 3f;
-    protected float jetPackMaxDuration = 3f;
-    protected float jetPackDuration = 0f;
-    protected Vector3 velocity;
+    //PlayerStats
+    //Healthpoints
+    protected float healthPoints;
+    protected float healthRegeneration;
+
+    //Armor
+    protected int bulletArmorPoints;
+    protected int explosionArmorPoints;
+
+    //Movement
+    protected float moveSpeed;
+    protected float groundAcceleration;
+    protected float airAcceleration;
+    protected float jetPackPower;
+    protected float jetPackMaxDuration;
+
+    protected float jetPackDuration;
+
+    //Cooldown values
+    protected float shootCooldown;
+    protected float firrate;
+
+    //Ammo values
+    protected int specialAbilityAmmo;
 
     //TopDown ability values
     protected bool isTopDown = false;
@@ -50,6 +59,8 @@ public abstract class PlayerBehavior : MonoBehaviour
     protected bool isGrounded;
     protected float groundCheckRange = 1f; //groundCheckRange needs to be re-set after Player models are done
 
+    //Velocity
+    protected Vector3 velocity;
 
     //Input
     protected GameInput gameInput;
@@ -293,11 +304,12 @@ public abstract class PlayerBehavior : MonoBehaviour
         onDeath.Invoke();
     }
 
-    private void GetPlayerStats()
+    protected virtual void GetPlayerStats()
     {
         //Get Values
         //Healthpoints
         healthPoints = UpgradeManager.Instance.PlayerMaxHealth;
+        healthRegeneration = UpgradeManager.Instance.PlayerHealthRegeneration;
 
         //Armor
         bulletArmorPoints = UpgradeManager.Instance.PlayerBulletArmorPoints;
@@ -309,6 +321,13 @@ public abstract class PlayerBehavior : MonoBehaviour
         airAcceleration = UpgradeManager.Instance.PlayerAirAcceleration;
         jetPackPower = UpgradeManager.Instance.PlayerJetPackPower;
         jetPackMaxDuration = UpgradeManager.Instance.PlayerJetPackMaxDuration;
+
+        //Firerate
+        firrate = UpgradeManager.Instance.PlayerFirerate;
+
+        //Ammo
+        specialAbilityAmmo = UpgradeManager.Instance.PlayerSpecialAbilityAmmo;
+
     }
 
 }

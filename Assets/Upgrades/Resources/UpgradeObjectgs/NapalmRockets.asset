@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87d8fa6d920a6794b996543c5ee62136, type: 3}
-  m_Name: DamageUp
+  m_Name: NapalmRockets
   m_EditorClassIdentifier: 
-  Name: Damage UP
-  Description: Damage + 5
-  PlayerType: 0
-  Rarity: 0
-  Type: 0
-  IsStackable: 1
-  AddValue: 5
+  Name: Napalm Rockets
+  Description: Rockets create an additional burn area on impact
+  PlayerType: 1
+  Rarity: 2
+  Type: 2
+  IsStackable: 0
+  AddValue: 0
   AmplifyValue: 0
-  ActivateValue: 0
-  UpgradeScript: {fileID: 11500000, guid: 0c0510ff73400704fbfabcc3ff6bb987, type: 3}
+  ActivateValue: 1
+  UpgradeScript: {fileID: 0}
   UpgradeSymbol: {fileID: 0}
