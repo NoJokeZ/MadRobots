@@ -71,16 +71,6 @@ public class CameraBehavior : MonoBehaviour
     {
         if (isPlayerAlive)
         {
-            //Transition handling
-            if (topDownAbility.WasPressedThisFrame() && !IsTopDown && !IsTransitionOngoing)
-            {
-                StartCoroutine(TransitionToTD());
-            }
-            else if (topDownAbility.WasPressedThisFrame() && IsTopDown && !IsTransitionOngoing)
-            {
-                StartCoroutine(TransitionToFP());
-            }
-
             //Camera follow and movement handling
             if (IsTopDown && !IsTransitionOngoing)
             {
@@ -111,6 +101,16 @@ public class CameraBehavior : MonoBehaviour
             if (!IsTopDown && !IsTransitionOngoing)
             {
                 CameraFirsPersonFollow();
+            }
+
+            //Transition handling
+            if (topDownAbility.WasPressedThisFrame() && !IsTopDown && !IsTransitionOngoing)
+            {
+                StartCoroutine(TransitionToTD());
+            }
+            else if (topDownAbility.WasPressedThisFrame() && IsTopDown && !IsTransitionOngoing)
+            {
+                StartCoroutine(TransitionToFP());
             }
         }
     }

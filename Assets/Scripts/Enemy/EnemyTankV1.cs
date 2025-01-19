@@ -3,13 +3,14 @@ using UnityEngine;
 
 public class EnemyTankV1 : EnemyBehavior
 {
-    private Transform upperBody;
-    private Transform weaponEnd;
     private Transform lowerBody;
+    private Transform upperBody;
+    private Transform barrel;
+    private Transform weaponEnd;
 
     private Vector3 velocity;
     private int leftRight;
-    private float leftRightAngle;
+    public float leftRightAngle;
 
     private float burstShootCooldown = 0.2f;
     private int shotCount = 0;
@@ -44,10 +45,11 @@ public class EnemyTankV1 : EnemyBehavior
     {
         base.Awake();
         HealtPoints = 15;
-        upperBody = transform.Find("UpperBody");
-        weaponEnd = transform.Find("UpperBody/Barrel/WeaponEnd");
-        projectile = Resources.Load<GameObject>("EnemyeProjectile1");
         lowerBody = transform.Find("LowerBody");
+        upperBody = transform.Find("LowerBody/UpperBody");
+        barrel = transform.Find("LowerBody/UpperBody/Barrel");
+        weaponEnd = transform.Find("LowerBody/UpperBody/Barrel/WeaponEnd");
+        projectile = Resources.Load<GameObject>("EnemyeProjectile1");
         shootInterval = 4f;
         startShootAngle = 30f;
     }
@@ -229,6 +231,12 @@ public class EnemyTankV1 : EnemyBehavior
         float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         Quaternion newDirection = Quaternion.AngleAxis(angle, Vector3.up);
         upperBody.rotation = Quaternion.RotateTowards(upperBody.rotation, newDirection, rotateSmoothness * Time.deltaTime);
+
+        //Rotation of weapon towards player
+        Vector3 direction2 = (playerLastSeenPostion - barrel.position).normalized;
+        Quaternion newDirection2 = Quaternion.LookRotation(direction2, Vector3.up);
+        barrel.rotation = Quaternion.RotateTowards(barrel.rotation, newDirection2, rotateWeaponSmothness * Time.deltaTime);
+        barrel.eulerAngles = new Vector3(barrel.eulerAngles.x, upperBody.eulerAngles.y, upperBody.eulerAngles.z);
     }
 
     protected override void CheckCanSeePlayer()
@@ -238,7 +246,7 @@ public class EnemyTankV1 : EnemyBehavior
 
         if (player != null)
         {
-            playerDirection = (player.transform.position - transform.position).normalized;
+            playerDirection = (player.transform.position - upperBody.position).normalized;
         }
         Debug.DrawRay(upperBody.position, playerDirection * detectionRange, Color.red);
 

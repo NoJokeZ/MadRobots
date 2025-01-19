@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         playerSpawn = GameObject.Find("PlayerSpawn").transform;
-        ChosenPlayerPrefab = Resources.Load<GameObject>("TestPlayer");
+        ChosenPlayerPrefab = Resources.Load<GameObject>("RocketV1");
 
     }
 

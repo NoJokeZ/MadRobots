@@ -4,7 +4,7 @@ public class EnemyTurretV1 : EnemyBehavior
 {
     //GameObjects and components
     private Transform upperBody;
-    private Transform weapon;
+    private Transform barrel;
     private Transform weaponEnd;
 
 
@@ -12,9 +12,9 @@ public class EnemyTurretV1 : EnemyBehavior
     {
         base.Awake();
         HealtPoints = 15;
-        upperBody = transform.Find("Body2");
-        weapon = transform.Find("Body2/Weapon");
-        weaponEnd = transform.Find("Body2/Weapon/WeaponEnd");
+        upperBody = transform.Find("LowerBody/UpperBody");
+        barrel = transform.Find("LowerBody/UpperBody/Barrel");
+        weaponEnd = transform.Find("LowerBody/UpperBody/Barrel/WeaponEnd");
         projectile = Resources.Load<GameObject>("EnemyeProjectile1");
     }
 
@@ -35,10 +35,10 @@ public class EnemyTurretV1 : EnemyBehavior
         upperBody.rotation = Quaternion.RotateTowards(upperBody.rotation, newDirection, rotateSmoothness * Time.deltaTime);
 
         //Rotation of weapon towards player
-        Vector3 direction2 = (playerLastSeenPostion - weapon.position).normalized;
+        Vector3 direction2 = (playerLastSeenPostion - barrel.position).normalized;
         Quaternion newDirection2 = Quaternion.LookRotation(direction2, Vector3.up);
-        weapon.rotation = Quaternion.RotateTowards(weapon.rotation, newDirection2, rotateWeaponSmothness * Time.deltaTime);
-        weapon.eulerAngles = new Vector3(weapon.eulerAngles.x, upperBody.eulerAngles.y, upperBody.eulerAngles.z);
+        barrel.rotation = Quaternion.RotateTowards(barrel.rotation, newDirection2, rotateWeaponSmothness * Time.deltaTime);
+        barrel.eulerAngles = new Vector3(barrel.eulerAngles.x, upperBody.eulerAngles.y, upperBody.eulerAngles.z);
 
     }
 
@@ -47,7 +47,7 @@ public class EnemyTurretV1 : EnemyBehavior
 
         if (player != null)
         {
-            playerDirection = (player.transform.position - transform.position).normalized;
+            playerDirection = (player.transform.position - upperBody.position).normalized;
         }
         Debug.DrawRay(upperBody.position, playerDirection * detectionRange, Color.red);
 
@@ -68,7 +68,7 @@ public class EnemyTurretV1 : EnemyBehavior
     }
     protected override void CheckShouldShoot()
     {
-        Vector3 lookDirection = weapon.transform.forward;
+        Vector3 lookDirection = barrel.transform.forward;
         float angle = Vector3.Angle(lookDirection, playerDirection);
 
         if (angle <= startShootAngle)

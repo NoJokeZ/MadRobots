@@ -51,13 +51,13 @@ public abstract class PlayerBehavior : MonoBehaviour
     protected int specialAbilityAmmo;
 
     //TopDown ability values
-    protected bool isTopDown = false;
-    protected bool isTransitionOngoing = false;
+    public bool isTopDown = false;
+    public bool isTransitionOngoing = false;
 
 
     //Grounded values
     protected bool isGrounded;
-    protected float groundCheckRange = 1f; //groundCheckRange needs to be re-set after Player models are done
+    protected float groundCheckRange = 1.2f; //1.1 is heigth of RocketV1 transform on ground
 
     //Velocity
     protected Vector3 velocity;
