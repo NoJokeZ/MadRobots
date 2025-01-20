@@ -72,6 +72,8 @@ public abstract class PlayerBehavior : MonoBehaviour
 
     //Gameobjects
     protected Rigidbody rb;
+    protected Transform upperBody;
+    protected Transform weapons;
     protected Transform cameraTransform;
     protected CameraBehavior cameraBehavior;
     protected GameObject weaponEnds;
@@ -94,6 +96,8 @@ public abstract class PlayerBehavior : MonoBehaviour
 
         //GetCompontents
         rb = GetComponent<Rigidbody>();
+        upperBody = transform.Find("UpperBody");
+        weapons = transform.Find("UpperBody/Weapons");
         cameraTransform = Camera.main.transform;
         cameraBehavior = Camera.main.GetComponent<CameraBehavior>();
         weaponEnds = transform.Find("UpperBody/Weapons/WeaponEnds").gameObject;
@@ -135,8 +139,9 @@ public abstract class PlayerBehavior : MonoBehaviour
 
 
         //Rotate player model
-        transform.eulerAngles = new Vector3(0, cameraTransform.eulerAngles.y, 0); //If Player should be able to tilt completly 0 need to be set to current rotation. (more complicated of course...)
-
+        transform.eulerAngles = new Vector3(0, cameraTransform.eulerAngles.y, 0);
+        //upperBody.transform.eulerAngles = new Vector3(0, cameraTransform.eulerAngles.y, 0);
+        weapons.transform.eulerAngles = new Vector3(cameraTransform.eulerAngles.x, upperBody.eulerAngles.y, 0);
 
         //Movement
         if (!isTopDown && !isTransitionOngoing)
@@ -184,6 +189,9 @@ public abstract class PlayerBehavior : MonoBehaviour
         //smooth out velocity
         velocity.x = Mathf.Lerp(velocity.x, moveDirection.x * moveSpeed, acceleration * Time.deltaTime);
         velocity.z = Mathf.Lerp(velocity.z, moveDirection.z * moveSpeed, acceleration * Time.deltaTime);
+
+        //if (!moveDirection.Equals(Vector3.zero)) transform.rotation = Quaternion.LookRotation(moveDirection);
+        //if (!moveDirection.Equals(Vector3.zero)) transform.eulerAngles = new Vector3(0, cameraTransform.eulerAngles.y, 0);
 
     }
 

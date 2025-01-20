@@ -8,12 +8,6 @@ public class RocketV1Behavior : PlayerBehavior
     private GameObject missle;
     private GameObject missleTD;
 
-    //WeaponTurn values
-    private Transform weapons;
-    //private Transform weaponsFPSave;
-    //private Quaternion weaponsUp;
-    //private Quaternion weaponsDown;
-
     public float moveDirectionZ;
     public float moveDirectionX;
 
@@ -31,8 +25,6 @@ public class RocketV1Behavior : PlayerBehavior
 
         missle = Resources.Load<GameObject>("Missle");
         missleTD = Resources.Load<GameObject>("missleTD");
-
-        weapons = transform.Find("UpperBody/Weapons");
 
     }
 

@@ -250,7 +250,7 @@ public class CameraBehavior : MonoBehaviour
         {
             playerBehavior = player.GetComponent<PlayerBehavior>();
 
-            fPCameraTransform = player.transform.Find("FPCameraLocation");
+            fPCameraTransform = player.transform.Find("UpperBody/FPCameraLocation");
             tDCameraTransform = player.transform.Find("TDCameraLocation");
 
             isPlayerAlive = true;
