@@ -9,7 +9,7 @@ using UnityEngine.Events;
 public class UpgradeManager : MonoBehaviour
 {
     //Self instance
-    public static UpgradeManager Instance;
+    public static UpgradeManager Instance; //property
 
     //Player objects
     private GameObject player;

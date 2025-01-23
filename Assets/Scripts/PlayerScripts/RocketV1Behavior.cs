@@ -31,7 +31,7 @@ public class RocketV1Behavior : PlayerBehavior
     protected override void Update()
     {
         base.Update();
-        launchRocket();
+        LaunchRocket();
         CooldownCountDown();
 
         if (topDownAbility.WasPressedThisFrame() && !isTopDown && !isTransitionOngoing)
@@ -49,7 +49,7 @@ public class RocketV1Behavior : PlayerBehavior
 
     }
 
-    private void launchRocket()
+    private void LaunchRocket()
     {
         if (shoot.WasPressedThisFrame() && shootCooldown == 0f)
         {

@@ -18,6 +18,8 @@ public class Upgrade : ScriptableObject
     public bool ActivateValue;
     public MonoScript UpgradeScript;
     public GameObject UpgradeSymbol;
+
+
 }
 
 public enum UpgradeRarity
