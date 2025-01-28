@@ -140,7 +140,6 @@ public abstract class PlayerBehavior : MonoBehaviour
 
         //Rotate player model
         transform.eulerAngles = new Vector3(0, cameraTransform.eulerAngles.y, 0);
-        //upperBody.transform.eulerAngles = new Vector3(0, cameraTransform.eulerAngles.y, 0);
         weapons.transform.eulerAngles = new Vector3(cameraTransform.eulerAngles.x, upperBody.eulerAngles.y, 0);
 
         //Movement
@@ -189,10 +188,6 @@ public abstract class PlayerBehavior : MonoBehaviour
         //smooth out velocity
         velocity.x = Mathf.Lerp(velocity.x, moveDirection.x * moveSpeed, acceleration * Time.deltaTime);
         velocity.z = Mathf.Lerp(velocity.z, moveDirection.z * moveSpeed, acceleration * Time.deltaTime);
-
-        //if (!moveDirection.Equals(Vector3.zero)) transform.rotation = Quaternion.LookRotation(moveDirection);
-        //if (!moveDirection.Equals(Vector3.zero)) transform.eulerAngles = new Vector3(0, cameraTransform.eulerAngles.y, 0);
-
     }
 
     /// <summary>
