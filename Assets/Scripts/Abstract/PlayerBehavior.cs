@@ -2,11 +2,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public enum PlayerType
-{
-    Universal,
-    Rocket
-}
 
 public abstract class PlayerBehavior : MonoBehaviour
 {
@@ -17,13 +12,6 @@ public abstract class PlayerBehavior : MonoBehaviour
     private bool isInvincible = false;
     private float invincibleTime = 0.50f;
     private float invincibleCounter = 0f;
-
-    protected enum DamageType
-    {
-        Bullet,
-        Explosion,
-        Melee
-    }
 
     //PlayerStats
     //Healthpoints
@@ -115,10 +103,7 @@ public abstract class PlayerBehavior : MonoBehaviour
     protected void OnEnable()
     {
         //Enable Inputs
-        move.Enable();
-        jetPack.Enable();
-        topDownAbility.Enable();
-        shoot.Enable();
+        EnableControls();
 
         GetPlayerStats();
     }
@@ -126,10 +111,7 @@ public abstract class PlayerBehavior : MonoBehaviour
     protected void OnDisable()
     {
         //Disable Inputs
-        move.Disable();
-        jetPack.Disable();
-        topDownAbility.Disable();
-        shoot.Disable();
+        DisableControls();
     }
 
     protected virtual void Update()
@@ -333,4 +315,20 @@ public abstract class PlayerBehavior : MonoBehaviour
 
     }
 
+
+    public void EnableControls()
+    {
+        move.Enable();
+        jetPack.Enable();
+        topDownAbility.Enable();
+        shoot.Enable();
+    }
+
+    public void DisableControls()
+    {
+        move.Disable();
+        jetPack.Disable();
+        topDownAbility.Disable();
+        shoot.Disable();
+    }
 }

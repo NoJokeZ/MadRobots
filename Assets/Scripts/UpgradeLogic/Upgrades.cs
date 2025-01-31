@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,19 +20,6 @@ public class Upgrade : ScriptableObject
 
 }
 
-public enum UpgradeRarity
-{
-    Common,
-    Rare,
-    Legendary
-}
-
-public enum UpgradeType
-{
-    Add,
-    Amplify,
-    Activate
-}
 
 public abstract class UpgradeScript : MonoBehaviour
 {

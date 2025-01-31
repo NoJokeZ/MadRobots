@@ -4,5 +4,26 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: ba2e6b235157f1b4591f0af7382dd7a9
+  - enabled: 1
+    path: Assets/Scenes/Tutorial.unity
+    guid: e6b31b7605e19b845bef7cb0239d90c0
+  - enabled: 1
+    path: Assets/Scenes/SurroundingMountains.unity
+    guid: dc23144978042714eaafcb543d50e9d9
+  - enabled: 1
+    path: Assets/Scenes/IceSpikes.unity
+    guid: 2f3259c5df1b1ce40981d4c593062c9b
+  - enabled: 1
+    path: Assets/Scenes/Canyon.unity
+    guid: 57fe4d5872fd9f04ea5c3bc310e2950e
+  - enabled: 1
+    path: Assets/Scenes/BigCity.unity
+    guid: 53a8a32e6dab30b4fae732186a794b40
+  - enabled: 1
+    path: Assets/Scenes/UpgradeArea.unity
+    guid: ac829b5397981ae4ab261f9a60853bd5
   m_configObjects: {}

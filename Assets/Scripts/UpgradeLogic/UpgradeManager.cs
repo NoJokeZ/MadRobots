@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -92,21 +89,12 @@ public class UpgradeManager : MonoBehaviour
         }
 
         //Even creating
-        if ( UpgradeEvent == null)
+        if (UpgradeEvent == null)
         {
             UpgradeEvent = new UnityEvent();
         }
 
-        //Get player objects
-        //if (player == null)
-        //{
-        //    GetPlayerObjects();
-        //}
         StartCoroutine(GetPlayerObjects());
-
-
-        //Get player stats
-        //GetPlayerStats(CurrentPlayerType);
 
 
         //Get all available Upgrades for current player type
@@ -152,7 +140,7 @@ public class UpgradeManager : MonoBehaviour
 
         playerBehavior = player.GetComponent<PlayerBehavior>();
         CurrentPlayerType = playerBehavior.myType;
-            
+
         CurrentPlayerType = PlayerType.Rocket; //NEEEDED ONLY UNTIL MENU AND PLAYER SELECTION IS IMPLEMENTED
 
 
@@ -262,7 +250,7 @@ public class UpgradeManager : MonoBehaviour
 
         //Clears the upgrade event
         UpgradeEvent = new UnityEvent();
-        
+
         //Puts the reusable upgrade back in their respectiv lists
         for (int i = 0; i < upgrades.Length; i++)
         {
@@ -295,7 +283,7 @@ public class UpgradeManager : MonoBehaviour
     /// </summary>
     /// <param name="other"></param>
     /// <param name="slot"></param>
-    public void UpgradeSelected(Collider other,UpgradeSlot slot)
+    public void UpgradeSelected(Collider other, UpgradeSlot slot)
     {
         //Adds the selects SO
         gameObject.AddComponent(upgrades[(int)slot].UpgradeScript.GetClass());
@@ -356,11 +344,3 @@ public class UpgradeManager : MonoBehaviour
 
 }
 
-
-public enum UpgradeSlot
-{
-    Slot1,
-    Slot2,
-    Slot3,
-    Slot4
-};

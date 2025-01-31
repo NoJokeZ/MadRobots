@@ -21,5 +21,5 @@ MonoBehaviour:
   AddValue: 1
   AmplifyValue: 0
   ActivateValue: 0
-  UpgradeScript: {fileID: 0}
-  UpgradeSymbol: {fileID: 0}
+  UpgradeScript: {fileID: 11500000, guid: e3570e0ce07ad474dadd149904f0cead, type: 3}
+  UpgradeSymbol: {fileID: 6443710276386662471, guid: 0a5d29e2a9d4f484cb44d4f514e258a6, type: 3}

@@ -25,7 +25,9 @@ public class EnemyTankV1 : EnemyBehavior
     private float minAttackStateCooldown = 1f;
     private float maxAttackStateCooldown = 3f;
 
-
+    /// <summary>
+    /// Enemy idle states
+    /// </summary>
     private enum IdleState
     {
         idle,
@@ -33,6 +35,9 @@ public class EnemyTankV1 : EnemyBehavior
         turn
     }
 
+    /// <summary>
+    /// Enemy attack states
+    /// </summary>
     private enum AttackState
     {
         stand,

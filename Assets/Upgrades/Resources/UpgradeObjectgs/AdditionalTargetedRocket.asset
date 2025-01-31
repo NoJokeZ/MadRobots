@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Additional Targeted Rocket
   Description: Special Ability Ammunition +1
-  PlayerType: 1
+  PlayerType: 2
   Rarity: 1
   Type: 0
   IsStackable: 1

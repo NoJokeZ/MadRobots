@@ -125,6 +125,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""900730c6-b95a-407a-a7b0-db625d342b4b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -554,6 +563,17 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""TopDownAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ae748d36-b7fc-4f60-ad3e-3a647be3420b"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1152,6 +1172,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_ChangeControls = m_Player.FindAction("ChangeControls", throwIfNotFound: true);
         m_Player_TopDownAbility = m_Player.FindAction("TopDownAbility", throwIfNotFound: true);
+        m_Player_Menu = m_Player.FindAction("Menu", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1236,6 +1257,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_ChangeControls;
     private readonly InputAction m_Player_TopDownAbility;
+    private readonly InputAction m_Player_Menu;
     public struct PlayerActions
     {
         private @GameInput m_Wrapper;
@@ -1251,6 +1273,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @ChangeControls => m_Wrapper.m_Player_ChangeControls;
         public InputAction @TopDownAbility => m_Wrapper.m_Player_TopDownAbility;
+        public InputAction @Menu => m_Wrapper.m_Player_Menu;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1293,6 +1316,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @TopDownAbility.started += instance.OnTopDownAbility;
             @TopDownAbility.performed += instance.OnTopDownAbility;
             @TopDownAbility.canceled += instance.OnTopDownAbility;
+            @Menu.started += instance.OnMenu;
+            @Menu.performed += instance.OnMenu;
+            @Menu.canceled += instance.OnMenu;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1330,6 +1356,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @TopDownAbility.started -= instance.OnTopDownAbility;
             @TopDownAbility.performed -= instance.OnTopDownAbility;
             @TopDownAbility.canceled -= instance.OnTopDownAbility;
+            @Menu.started -= instance.OnMenu;
+            @Menu.performed -= instance.OnMenu;
+            @Menu.canceled -= instance.OnMenu;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1523,6 +1552,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnChangeControls(InputAction.CallbackContext context);
         void OnTopDownAbility(InputAction.CallbackContext context);
+        void OnMenu(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

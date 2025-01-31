@@ -31,6 +31,7 @@ public class CameraBehavior : MonoBehaviour
 
     //Crosshair-objects
     [SerializeField] Texture2D cursorTD;
+    private Texture2D cursorDefault;
     [SerializeField] Material crosshairMaterial;
     private Vector2 cursorPivot;
 
@@ -48,9 +49,9 @@ public class CameraBehavior : MonoBehaviour
         GetPlayerObjects();
 
         //Set cursor properties
+        //cursorDefault = Cursor.
         Cursor.lockState = CursorLockMode.Locked;
         cursorPivot = new Vector2(cursorTD.width / 2, cursorTD.height / 2);
-        Cursor.SetCursor(cursorTD, cursorPivot, CursorMode.Auto);
         crosshairMaterial.color = Color.white;
 
     }
@@ -113,12 +114,6 @@ public class CameraBehavior : MonoBehaviour
                 StartCoroutine(TransitionToFP());
             }
         }
-    }
-
-    private void FixedUpdate()
-    {
-
-
     }
 
 
@@ -199,6 +194,7 @@ public class CameraBehavior : MonoBehaviour
         IsTopDown = true;
 
         //Cursor visable
+        Cursor.SetCursor(cursorTD, cursorPivot, CursorMode.Auto);
         Cursor.lockState = CursorLockMode.Confined;
 
     }
@@ -232,6 +228,7 @@ public class CameraBehavior : MonoBehaviour
         IsTopDown = false;
 
         //Crosshair visible
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         crosshairMaterial.color = Color.white;
     }
 
