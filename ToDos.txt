@@ -15,9 +15,9 @@ ToDo:
 
 EnemyAi advancen (Wall detection)
 
-Asset-Moddeling (Player, Maps, Upgrades)
++Asset-Moddeling (+Player, +Maps, +Upgrades)
 
-Menu and Gameplay-Loop
++Menu and Gameplay-Loop
 
 UI
 
@@ -54,3 +54,18 @@ WIP in player scrtipt:
 ++Special Ability Ammunition Up
 ++DoubleExplosion
 ++NapalmRockets
+
+
+Zielsuchende raketen
+
+
+Fix:
+
+PausMenu openable in Main menu -> Crash
+
+Lighitng in Canyon and BigCity
+
+
+Implement:
+
+Uprgade between levels

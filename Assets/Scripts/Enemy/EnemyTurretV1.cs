@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class EnemyTurretV1 : EnemyBehavior
 {
+
     //GameObjects and components
     private Transform upperBody;
     private Transform barrel;
@@ -11,6 +12,7 @@ public class EnemyTurretV1 : EnemyBehavior
     protected override void Awake()
     {
         base.Awake();
+        enemyType = EnemyType.Stationary;
         HealtPoints = 15;
         upperBody = transform.Find("LowerBody/UpperBody");
         barrel = transform.Find("LowerBody/UpperBody/Barrel");

@@ -49,6 +49,7 @@ public class EnemyTankV1 : EnemyBehavior
     protected override void Awake()
     {
         base.Awake();
+        enemyType = EnemyType.Moving;
         HealtPoints = 15;
         lowerBody = transform.Find("LowerBody");
         upperBody = transform.Find("LowerBody/UpperBody");

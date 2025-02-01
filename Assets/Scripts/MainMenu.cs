@@ -1,7 +1,5 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
@@ -19,9 +17,8 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Confined;
         eventSystem = EventSystem.current;
-
-        gameManager = GameManager.Instance;
 
         startGameButton = transform.Find("StartGame").GetComponent<Button>();
         tutorialButton = transform.Find("Tutorial").GetComponent<Button>();
@@ -38,17 +35,23 @@ public class MainMenu : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
+    }
+
     private void PlayGame()
     {
         eventSystem.SetSelectedGameObject(null);
+        //Call gameManager to start the game
         gameManager.GameStart();
     }
 
     private void PlayTutorial()
     {
         eventSystem.SetSelectedGameObject(null);
-        //StartCoroutine(gameManager.TutorialStartCO());
-        SceneManager.LoadScene("Tutorial");
+        //Call gameManager to load Tutorial
+        gameManager.TutorialStart();
     }
 
     private void Settings()
@@ -69,9 +72,5 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    private IEnumerator TempCO()
-    {
-        yield return null;
-    }
 }
 

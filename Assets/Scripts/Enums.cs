@@ -63,3 +63,21 @@ public enum SceneType
     BossLevel,
     UpgradeArea
 }
+
+public enum GameState
+{
+    Menu,
+    Tutorial,
+    Running,
+    LevelFinished,
+    Upgrading,
+    BossFinished
+}
+
+public enum EnemyType
+{
+    Dummy,
+    Stationary,
+    Moving,
+    Boss
+}

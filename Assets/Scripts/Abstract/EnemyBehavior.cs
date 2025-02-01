@@ -2,6 +2,8 @@ using UnityEngine;
 
 public abstract class EnemyBehavior : MonoBehaviour
 {
+    protected EnemyType enemyType;
+
     public float HealtPoints { get; protected set; } = 10;
 
     //Explosion damage values
@@ -35,6 +37,7 @@ public abstract class EnemyBehavior : MonoBehaviour
     //Gameobjects and components
     protected GameObject player { get; private set; }
     protected GameManager gameManager;
+    protected EnemyManager enemyManager;
     protected bool isPlayerAlive;
     protected GameObject projectile;
     protected Rigidbody rb;
@@ -44,6 +47,7 @@ public abstract class EnemyBehavior : MonoBehaviour
     {
         GetPlayerObjects();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
         rb = GetComponent<Rigidbody>();
         playerLayerMaskIndex = LayerMask.NameToLayer("Player");
     }
@@ -220,5 +224,11 @@ public abstract class EnemyBehavior : MonoBehaviour
     private void GetPlayerObjects()
     {
         player = GameObject.FindWithTag("Player");
+    }
+
+
+    private void OnDestroy()
+    {
+        enemyManager.EnemyDied();
     }
 }

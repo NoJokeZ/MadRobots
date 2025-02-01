@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,15 +17,19 @@ public class GameManager : MonoBehaviour
     private bool isGameRunning = false;
     private bool isTutorialRunning = false;
 
-    private List<SceneInfo> basicLevels = new List<SceneInfo>();
-    private List<SceneInfo> bossLevels = new List<SceneInfo>();
-    private List<SceneInfo> upgradeLevels = new List<SceneInfo>();
+    private GameState gameState;
+
+    private List<SceneInfo> basicLevels = new();
+    private List<SceneInfo> bossLevels = new();
+    private List<SceneInfo> upgradeLevels = new();
     private SceneInfo tutorialLevel;
     private SceneInfo mainMenu;
 
+    private SceneInfo currentScene;
 
 
-    
+
+
 
     private void Awake()
     {
@@ -59,16 +61,10 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void Update()
-    {
-        
-    }
-
-
 
     public void OnPlayerDeath()
     {
-        GameEnd();
+        //GameEnd();
     }
 
     private void GetSceneInfos()
@@ -101,6 +97,32 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        if (currentScene != null)
+        {
+            if (currentScene.SceneType != SceneType.Menu)
+            {
+
+                playerSpawn = GameObject.Find("PlayerSpawn").transform;
+                Instantiate(ChosenPlayerPrefab, playerSpawn.position, playerSpawn.rotation);
+                IsPlayerAlive = true;
+
+                isTutorialRunning = true;
+
+                if (currentScene.SceneType == SceneType.Tutorial)
+                {
+                    gameState = GameState.Tutorial;
+                }
+                else
+                {
+                    gameState = GameState.Running;
+                }
+            }
+
+        }
+    }
+
     public void GameStart()
     {
         //Selecet random level from basic levels
@@ -108,48 +130,18 @@ public class GameManager : MonoBehaviour
 
         //Load that level
         SceneManager.LoadScene(basicLevels[level].name);
+        currentScene = basicLevels[level];
+
         //Remove the level from the available levels
         basicLevels.Remove(basicLevels[level]);
         //Up the level count
         levelCounter++;
-
-        //Get player spawn position and spawn the player
-        playerSpawn = GameObject.Find("PlayerSpawn").transform;
-        Instantiate(ChosenPlayerPrefab, playerSpawn.position, playerSpawn.rotation);
-        IsPlayerAlive = true;
-
-        //set the game state to running //Probably changing to an enum soon
-        isGameRunning = true;
     }
 
-
-    public void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    public void TutorialStart()
     {
-        if (scene.name == tutorialLevel.name)
-        {
-            Debug.Log("Tutorial loaded");
-
-            playerSpawn = GameObject.Find("PlayerSpawn").transform;
-            Instantiate(ChosenPlayerPrefab, playerSpawn.position, playerSpawn.rotation);
-            IsPlayerAlive = true;
-
-            isTutorialRunning = true;
-        }
+        SceneManager.LoadScene(tutorialLevel.name);
     }
-
-
-    //public void TutorialStart()
-    //{
-    //    SceneManager.LoadScene(tutorialLevel.name);
-
-
-
-    //    playerSpawn = GameObject.Find("PlayerSpawn").transform;
-    //    Instantiate(ChosenPlayerPrefab, playerSpawn.position, playerSpawn.rotation);
-    //    IsPlayerAlive = true;
-
-    //    isTutorialRunning = true;
-    //}
 
     public void GameEnd()
     {
@@ -173,5 +165,38 @@ public class GameManager : MonoBehaviour
 
         //Loads the main menu
         SceneManager.LoadScene(mainMenu.name);
+        currentScene = mainMenu;
+
+        GetSceneInfos();
     }
+
+    private void LoadBossLevel()
+    {
+        //Selecet random level from basic levels
+        int level = Random.Range(0, bossLevels.Count);
+
+        //Load that level
+        SceneManager.LoadScene(bossLevels[level].name);
+        currentScene = bossLevels[level];
+
+        //Remove the level from the available levels
+        bossLevels.Remove(bossLevels[level]);
+    }
+
+    public void LevelEnd()
+    {
+        if (currentScene.SceneType == SceneType.BossLevel)
+        {
+            GameEnd(); //Krank einfach gewonnen
+        }
+        else if (levelCounter < easyLevelAmount)
+        {
+            GameStart();
+        }
+        else if (levelCounter == easyLevelAmount)
+        {
+            LoadBossLevel();
+        }
+    }
+
 }

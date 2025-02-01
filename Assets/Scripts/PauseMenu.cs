@@ -9,7 +9,6 @@ public class PauseMenu : MonoBehaviour
 
     private EventSystem eventSystem;
 
-    private GameObject managerObject;
     private GameManager gameManager;
     private UpgradeManager upgradeManager;
     private PlayerBehavior playerBehavior;
@@ -41,10 +40,6 @@ public class PauseMenu : MonoBehaviour
 
         eventSystem = EventSystem.current;
 
-        managerObject = GameObject.Find("GameManager");
-        gameManager = GameManager.Instance;
-        upgradeManager = UpgradeManager.Instance;
-
         gameInput = new GameInput();
         menu = gameInput.Player.Menu;
 
@@ -63,6 +58,12 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
     }
 
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
+        upgradeManager = UpgradeManager.Instance;
+    }
+
     private void OnEnable()
     {
         menu.Enable();
@@ -70,7 +71,10 @@ public class PauseMenu : MonoBehaviour
 
     private void OnDisable()
     {
-        menu.Disable();
+        if (menu != null)
+        {
+            menu.Disable();
+        }
     }
 
     void Update()
@@ -90,6 +94,12 @@ public class PauseMenu : MonoBehaviour
 
     private void Pause()
     {
+        if (eventSystem == null)
+        {
+            eventSystem = EventSystem.current;
+        }
+
+
         if (playerBehavior != null || GameObject.FindWithTag("Player").TryGetComponent<PlayerBehavior>(out playerBehavior))
         {
             playerBehavior.DisableControls();
@@ -130,7 +140,6 @@ public class PauseMenu : MonoBehaviour
 
         gameManager.GameEnd();
 
-        Destroy(Instance);
     }
 
     private void Quit()
