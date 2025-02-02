@@ -65,6 +65,8 @@ PausMenu openable in Main menu -> Crash
 
 Lighitng in Canyon and BigCity
 
+Player Death not working becasue problems with Main menu loading --> Pack den GameEnd aufruf in PLayer-ChechHP und Player check if under the map
+
 
 Implement:
 
