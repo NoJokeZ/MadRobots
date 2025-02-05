@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class UpgradeManager : MonoBehaviour
 {
@@ -16,22 +19,25 @@ public class UpgradeManager : MonoBehaviour
     //Upgrade parent object
     private GameObject upgradeObject;
 
-    //Colliders for upgrade choosing
-    private Collider upgradeCollider1;
-    private Collider upgradeCollider2;
-    private Collider upgradeCollider3;
-    private Collider upgradeCollider4;
+    //Transforms for upgrade cubes
+    private Transform upgradeTransform1;
+    private Transform upgradeTransform2;
+    private Transform upgradeTransform3;
+    private Transform upgradeTransform4;
 
     //Upgrade event
     public UnityEvent UpgradeEvent;
+
+    //Upgrade selected bool
+    public bool upgradeSelected = false;
 
     //Upgrade array
     private Upgrade[] upgrades = new Upgrade[4];
 
     //List of available Upgrades
-    private List<Upgrade> availableCommonUpgrades;
-    private List<Upgrade> availableRareUpgrades;
-    private List<Upgrade> availableLegendaryUpgrades;
+    private List<Upgrade> availableCommonUpgrades = new();
+    private List<Upgrade> availableRareUpgrades = new();
+    private List<Upgrade> availableLegendaryUpgrades = new();
 
     //Upgrance appearance chance
     private const float commonChance = 0.70f; //70%
@@ -73,6 +79,9 @@ public class UpgradeManager : MonoBehaviour
 
     private PlayerStats playerStats;
 
+    //GameManger
+    private GameManager gameManager;
+
 
 
     private void Awake()
@@ -102,6 +111,21 @@ public class UpgradeManager : MonoBehaviour
 
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnUpgradeSceneLoad;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnUpgradeSceneLoad;
+    }
+
+
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
+    }
     private void Update()
     {
         //Only for testing and debugging because player can respawn in testing
@@ -114,15 +138,28 @@ public class UpgradeManager : MonoBehaviour
     /// <summary>
     /// Get random Upgrades on upgrade scene Load
     /// </summary>
-    public void OnUpgradeSceneLoad()
+    public void OnUpgradeSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
     {
-        //Create new event if not existing
-        if (UpgradeEvent == null)
+        if (gameManager == null)
         {
-            UpgradeEvent = new UnityEvent();
+            gameManager = GameManager.Instance;
         }
 
-        GetRandomUpgrade();
+
+        if (gameManager.CurrentGameState == GameState.Upgrading)
+        {
+            //Create new event if not existing
+            if (UpgradeEvent == null)
+            {
+                UpgradeEvent = new UnityEvent();
+            }
+
+            upgradeSelected = false;
+
+            GetRandomUpgrade();
+
+            SpawnUpgradeCubes();
+        }
 
     }
 
@@ -155,7 +192,7 @@ public class UpgradeManager : MonoBehaviour
     {
         Upgrade[] allUpgrades; //New upgrade array for all upgrades
 
-        allUpgrades = Resources.LoadAll<Upgrade>("Upgrades"); //Load all upgrades there are
+        allUpgrades = Resources.LoadAll<Upgrade>("UpgradeObjects"); //Load all upgrades there are
 
         //Distribut all universal upgrade and player specific upgrade into their rarities
         foreach (Upgrade upgrade in allUpgrades)
@@ -243,10 +280,11 @@ public class UpgradeManager : MonoBehaviour
     /// </summary>
     private void ResetUpgrade(UpgradeSlot slot)
     {
-        //Activates the Upgrade
-        UpgradeEvent.Invoke();
 
-        Destroy(gameObject.GetComponent<Upgrade>());
+        //Upgrade temp = gameObject.GetComponent<Upgrade>();
+
+
+        Destroy(gameObject.GetComponent<UpgradeScript>());
 
         //Clears the upgrade event
         UpgradeEvent = new UnityEvent();
@@ -285,6 +323,9 @@ public class UpgradeManager : MonoBehaviour
     /// <param name="slot"></param>
     public void UpgradeSelected(Collider other, UpgradeSlot slot)
     {
+        if (upgradeSelected) return;
+        upgradeSelected = true;
+
         //Adds the selects SO
         gameObject.AddComponent(upgrades[(int)slot].UpgradeScript.GetClass());
 
@@ -293,6 +334,10 @@ public class UpgradeManager : MonoBehaviour
 
         //Resets the upgrade selection
         ResetUpgrade(slot);
+
+
+        gameManager.UpgradeEnd();
+        
     }
 
     /// <summary>
@@ -342,5 +387,19 @@ public class UpgradeManager : MonoBehaviour
         PlayerSpecialAbilityAmmo = playerStats.PlayerSpecialAbilityAmmo;
     }
 
+
+    private void SpawnUpgradeCubes()
+    {
+        upgradeTransform1 = GameObject.Find("Upgrade1").transform;
+        upgradeTransform2 = GameObject.Find("Upgrade2").transform;
+        upgradeTransform3 = GameObject.Find("Upgrade3").transform;
+        upgradeTransform4 = GameObject.Find("Upgrade4").transform;
+
+
+        Instantiate(upgrades[0].UpgradeSymbol, upgradeTransform1.position, upgradeTransform1.rotation);
+        Instantiate(upgrades[1].UpgradeSymbol, upgradeTransform2.position, upgradeTransform1.rotation);
+        Instantiate(upgrades[2].UpgradeSymbol, upgradeTransform3.position, upgradeTransform1.rotation);
+        Instantiate(upgrades[3].UpgradeSymbol, upgradeTransform4.position, upgradeTransform1.rotation);
+    }
 }
 

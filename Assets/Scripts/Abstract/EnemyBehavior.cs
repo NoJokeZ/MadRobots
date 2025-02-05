@@ -226,6 +226,14 @@ public abstract class EnemyBehavior : MonoBehaviour
         player = GameObject.FindWithTag("Player");
     }
 
+    private void DestroyOnWorldExit()
+    {
+        if (transform.position.y <= -20)
+        {
+            Destroy(gameObject);
+        }
+    }
+
 
     private void OnDestroy()
     {

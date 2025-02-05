@@ -79,7 +79,7 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (menu.WasPressedThisFrame())
+        if (menu.WasPressedThisFrame() && gameManager.CurrentGameState != GameState.Menu)
         {
             if (!isPaused)
             {
@@ -134,9 +134,9 @@ public class PauseMenu : MonoBehaviour
     {
         eventSystem.SetSelectedGameObject(null);
 
-
-        Time.timeScale = 1.0f;
         pauseMenuUI.SetActive(false);
+        Time.timeScale = 1.0f;
+        isPaused = false;
 
         gameManager.GameEnd();
 

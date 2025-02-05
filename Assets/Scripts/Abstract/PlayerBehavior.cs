@@ -272,6 +272,7 @@ public abstract class PlayerBehavior : MonoBehaviour
     {
         if (healthPoints <= 0)
         {
+            gameManager.GameEnd();
             Destroy(gameObject);
         }
     }
@@ -280,6 +281,7 @@ public abstract class PlayerBehavior : MonoBehaviour
     {
         if (transform.position.y <= -20)
         {
+            gameManager.GameEnd();
             Destroy(gameObject);
         }
     }

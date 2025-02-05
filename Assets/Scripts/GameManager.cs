@@ -14,10 +14,7 @@ public class GameManager : MonoBehaviour
     private int easyLevelAmount = 3;
     private int levelCounter = 0;
 
-    private bool isGameRunning = false;
-    private bool isTutorialRunning = false;
-
-    private GameState gameState;
+    public GameState CurrentGameState { get; private set; }
 
     private List<SceneInfo> basicLevels = new();
     private List<SceneInfo> bossLevels = new();
@@ -48,6 +45,8 @@ public class GameManager : MonoBehaviour
         ChosenPlayerPrefab = Resources.Load<GameObject>("RocketV1");
 
         GetSceneInfos();
+
+        CurrentGameState = GameState.Menu;
 
     }
 
@@ -108,15 +107,13 @@ public class GameManager : MonoBehaviour
                 Instantiate(ChosenPlayerPrefab, playerSpawn.position, playerSpawn.rotation);
                 IsPlayerAlive = true;
 
-                isTutorialRunning = true;
-
                 if (currentScene.SceneType == SceneType.Tutorial)
                 {
-                    gameState = GameState.Tutorial;
+                    CurrentGameState = GameState.Tutorial;
                 }
                 else
                 {
-                    gameState = GameState.Running;
+                    CurrentGameState = GameState.Running;
                 }
             }
 
@@ -136,11 +133,14 @@ public class GameManager : MonoBehaviour
         basicLevels.Remove(basicLevels[level]);
         //Up the level count
         levelCounter++;
+
+        CurrentGameState = GameState.Running;
     }
 
     public void TutorialStart()
     {
         SceneManager.LoadScene(tutorialLevel.name);
+        CurrentGameState = GameState.Tutorial;
     }
 
     public void GameEnd()
@@ -160,9 +160,6 @@ public class GameManager : MonoBehaviour
             IsPlayerAlive = false;
         }
 
-        //Set the game state to not running //Probably changing to an enum soon
-        isGameRunning = false;
-
         //Loads the main menu
         SceneManager.LoadScene(mainMenu.name);
         currentScene = mainMenu;
@@ -170,7 +167,7 @@ public class GameManager : MonoBehaviour
         GetSceneInfos();
     }
 
-    private void LoadBossLevel()
+    private void BossStart()
     {
         //Selecet random level from basic levels
         int level = Random.Range(0, bossLevels.Count);
@@ -181,21 +178,43 @@ public class GameManager : MonoBehaviour
 
         //Remove the level from the available levels
         bossLevels.Remove(bossLevels[level]);
+
+        CurrentGameState = GameState.Running;
     }
 
     public void LevelEnd()
     {
         if (currentScene.SceneType == SceneType.BossLevel)
         {
-            GameEnd(); //Krank einfach gewonnen
+            GameEnd(); 
         }
-        else if (levelCounter < easyLevelAmount)
+        else
+        {
+            UpgradeStart();
+        }
+    }
+
+    private void UpgradeStart()
+    {
+        //Selecet random level from basic levels
+        int level = Random.Range(0, upgradeLevels.Count);
+
+        //Load that level
+        SceneManager.LoadScene(upgradeLevels[level].name);
+        currentScene = upgradeLevels[level];
+
+        CurrentGameState = GameState.Upgrading;
+    }
+
+    public void UpgradeEnd()
+    {
+        if (levelCounter < easyLevelAmount)
         {
             GameStart();
         }
         else if (levelCounter == easyLevelAmount)
         {
-            LoadBossLevel();
+            BossStart();
         }
     }
 
