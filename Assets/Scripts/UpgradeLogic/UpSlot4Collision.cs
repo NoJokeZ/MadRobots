@@ -11,6 +11,12 @@ public class UpSlot4Collision : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        upgradeManager.UpgradeSelected(other, UpgradeSlot.Slot4);
+        if (other.transform.CompareTag("Player"))
+        {
+            upgradeManager.UpgradeSelected(other, UpgradeSlot.Slot4);
+
+            Destroy(gameObject);
+            Destroy(this);
+        }
     }
 }

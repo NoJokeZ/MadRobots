@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class EnemyBehavior : MonoBehaviour
 {
-    protected EnemyType enemyType;
+    public EnemyType enemyType { get; protected set; }
 
     public float HealtPoints { get; protected set; } = 10;
 
