@@ -67,6 +67,8 @@ Fix:
 
 +Player Death not working becasue problems with Main menu loading --> Pack den GameEnd aufruf in PLayer-ChechHP und Player check if under the map
 
+Some enemies drop trough map on spawn
+
 
 Implement:
 
