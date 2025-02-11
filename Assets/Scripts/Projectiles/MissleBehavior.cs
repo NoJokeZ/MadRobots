@@ -19,8 +19,8 @@ public class MissleBehavior : ProjectileBehavior
         explosion = Resources.Load<GameObject>("Explosion");
 
         //Missle values
-        ProjectileSpeed = 7f;
-        DropOffDistance = 20f;
+        ProjectileSpeed = 9f;
+        DropOffDistance = 40f;
         DropOffSpeed = 0.06f;
         LifeSpan = 20f;
         Damage = UpgradeManager.Instance.PlayerMissleDamage;

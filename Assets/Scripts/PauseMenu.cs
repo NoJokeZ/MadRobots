@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
@@ -67,6 +68,8 @@ public class PauseMenu : MonoBehaviour
     private void OnEnable()
     {
         menu.Enable();
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
@@ -75,6 +78,8 @@ public class PauseMenu : MonoBehaviour
         {
             menu.Disable();
         }
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     void Update()
@@ -92,6 +97,12 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    {
+
+    }
+
+
     private void Pause()
     {
         if (eventSystem == null)
@@ -100,10 +111,11 @@ public class PauseMenu : MonoBehaviour
         }
 
 
-        if (playerBehavior != null || GameObject.FindWithTag("Player").TryGetComponent<PlayerBehavior>(out playerBehavior))
+        if (playerBehavior != null || gameManager.player.TryGetComponent<PlayerBehavior>(out playerBehavior))
         {
             playerBehavior.DisableControls();
         }
+
 
         Cursor.lockState = CursorLockMode.Confined;
         pauseMenuUI.SetActive(true);
@@ -113,7 +125,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Resume()
     {
-        if (playerBehavior != null || GameObject.FindWithTag("Player").TryGetComponent<PlayerBehavior>(out playerBehavior))
+        if (playerBehavior != null)
         {
             playerBehavior.EnableControls();
         }

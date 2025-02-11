@@ -11,15 +11,26 @@ ToDo:
 
 +Upgrade Logic Upgrades (Mehr Upgrades + Logic zum  testen einbauen und testen)
 
-(RocketV1 / TopDownAbility reworken wegen special ammo oder zeit?)
-
-EnemyAi advancen (Wall detection)
-
 +Asset-Moddeling (+Player, +Maps, +Upgrades)
 
 +Menu and Gameplay-Loop
 
+
+EnemyAi advancen (Wall detection)
+More Enemies (Maybe only some slightly variation or only visual and size variation if no time)
+(RocketV1 / TopDownAbility reworken wegen special ammo oder zeit?)
+Enhance top down camera movement
+
+Seperate Upgrade cs
+
 UI
+
+Clean up file structur
+
+
+
+
+
 
 Second Player
 -> Choose Player logic
@@ -27,10 +38,6 @@ Second Player
 Second player Upgrades
 
 Assets for second player
-
-Maps and enemies
-
-
 
 
 (Ladebalken einzelne Ladeschritte haben bool und wenn fertig is bool true und dann ladebalken weiter (Banger Idee oder?))
@@ -66,5 +73,3 @@ Fix:
 +Lighitng in Canyon and BigCity -> bug only in Unity Editor, just generate Lightning in Lighting tab 
 
 +Player Death not working becasue problems with Main menu loading --> Pack den GameEnd aufruf in PLayer-ChechHP und Player check if under the map
-
-Upgrades selectable via bullets -> if tag = player einabuen

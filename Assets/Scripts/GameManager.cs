@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    private GameObject player;
+    public GameObject player { get; private set; }
     private Transform playerSpawn;
     private GameObject ChosenPlayerPrefab;
     public bool IsPlayerAlive { get; private set; } = false;
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
             {
 
                 playerSpawn = GameObject.Find("PlayerSpawn").transform;
-                Instantiate(ChosenPlayerPrefab, playerSpawn.position, playerSpawn.rotation);
+                player = Instantiate(ChosenPlayerPrefab, playerSpawn.position, playerSpawn.rotation);
                 IsPlayerAlive = true;
 
                 if (currentScene.SceneType == SceneType.Tutorial)

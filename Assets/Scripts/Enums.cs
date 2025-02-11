@@ -81,3 +81,11 @@ public enum EnemyType
     Moving,
     Boss
 }
+
+public enum Direction
+{
+    left,
+    right,
+    forward,
+    backward
+}

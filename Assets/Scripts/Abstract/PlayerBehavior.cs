@@ -122,13 +122,13 @@ public abstract class PlayerBehavior : MonoBehaviour
 
         //Rotate player model
         transform.eulerAngles = new Vector3(0, cameraTransform.eulerAngles.y, 0);
-        weapons.transform.eulerAngles = new Vector3(cameraTransform.eulerAngles.x, upperBody.eulerAngles.y, 0);
 
         //Movement
         if (!isTopDown && !isTransitionOngoing)
         {
             FPHorizontalMovement();
             FPVerticalMovement();
+            weapons.transform.eulerAngles = new Vector3(cameraTransform.eulerAngles.x, upperBody.eulerAngles.y, 0);
         }
         else
         {
@@ -168,8 +168,8 @@ public abstract class PlayerBehavior : MonoBehaviour
         float acceleration = isGrounded ? groundAcceleration : airAcceleration;
 
         //smooth out velocity
-        velocity.x = Mathf.Lerp(velocity.x, moveDirection.x * moveSpeed, acceleration * Time.deltaTime);
-        velocity.z = Mathf.Lerp(velocity.z, moveDirection.z * moveSpeed, acceleration * Time.deltaTime);
+        velocity.x = Mathf.Lerp(rb.velocity.x, moveDirection.x * moveSpeed, acceleration * Time.deltaTime);
+        velocity.z = Mathf.Lerp(rb.velocity.z, moveDirection.z * moveSpeed, acceleration * Time.deltaTime);
     }
 
     /// <summary>
