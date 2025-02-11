@@ -2,83 +2,108 @@ using UnityEngine;
 
 public abstract class EnemyBehavior : MonoBehaviour
 {
-    public EnemyType enemyType { get; protected set; }
-
-    public float HealtPoints { get; protected set; } = 10;
+    public EnemyType EnemyType { get; protected set; }
 
     //Explosion damage values
     private bool isExplosionDamageDelay = false;
     private float explosionDamageDelayTime = 0.25f;
     private float explosionDamageDeleyCounter = 0f;
 
-    //Shoot values
-    protected float shootInterval = 2f;
-    protected float shootCooldown;
+    #region Enemy Stats
+    //Enemy stats
+    public float EnemyMaxHealth { get; protected set; }
+    public float EnemyHealth { get; protected set; }
+    public int EnemyHealthRegeneration { get; protected set; }
+
+    //Enemy armor
+    public int EnemyBulletArmorPoints { get; protected set; }
+    public int EnemyExplosionArmorPoints { get; protected set; }
+
+    //Enemy movement
+    public float EnemyMoveSpeed { get; protected set; }
+    public float EnemyGroundAcceleration { get; protected set; }
+    public float EnemyAirAcceleration { get; protected set; }
+
+    //Enemy damage
+    public float EnemyProjectileDamage { get; protected set; }
+    public float EnemyMissleDamage { get; protected set; }
+    public float EnemyExplosionDamage { get; protected set; }
+    public float EnemyExplosionRadius { get; protected set; }
+
+    //Enemy firerate
+    public float EnemyFirerate { get; protected set; }
+    public int BurstShots { get; protected set; }
 
     //Player detection values
-    protected Vector3 playerDirection;
-    protected Vector3 playerLastSeenPostion;
-    protected float detectionRange = 10f;
-    protected float startShootAngle = 20f; //At what angle the enemy already start shooting before it can completly lock onto the player
-    protected bool playerDetected = false;
-    protected bool playerOnceSeen = false;
-    protected bool startShoot = false;
-    protected int playerLayerMaskIndex;
+    public float DetectionRange { get; protected set; }
+    public float StartShootAngle { get; protected set; } //At what angle the enemy already start shooting before it can completly lock onto the player
 
-    //Rotation behavior
-    protected float rotateSmoothness = 20f;
-    protected float rotateWeaponSmothness = 30f;
+    //Enemy turning values
+    public float RotateSmoothness { get; protected set; }
+    public float RotateWeaponSmothness { get; protected set; }
+    #endregion
 
-    //Movement values
-    protected float moveSpeed = 3f;
-    protected float acceleration = 5f;
 
+    //EnemyStats
+    protected EnemyStats enemyStats;
+
+    
 
     //Gameobjects and components
-    protected GameObject player { get; private set; }
+    public GameObject Player { get; private set; }
     protected GameManager gameManager;
     protected EnemyManager enemyManager;
     protected bool isPlayerAlive;
-    protected GameObject projectile;
+    public GameObject Projectile { get; protected set; }
     protected Rigidbody rb;
+
+    //Transform of enemy parts
+    public Transform lowerBody { get; private set; }
+    public Transform upperBody { get; private set; }
+    public Transform barrel { get; private set; }
+    public Transform weaponEnd { get; private set; }
+
+
+    private float killCheckDelay = 2f;
+    bool isKillCheckDelay = true;
 
 
     protected virtual void Awake()
     {
         GetPlayerObjects();
+
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
         rb = GetComponent<Rigidbody>();
-        playerLayerMaskIndex = LayerMask.NameToLayer("Player");
+
+        lowerBody = transform.Find("LowerBody");
+        upperBody = transform.Find("LowerBody/UpperBody");
+        barrel = transform.Find("LowerBody/UpperBody/Barrel");
+        weaponEnd = transform.Find("LowerBody/UpperBody/Barrel/WeaponEnd");
     }
 
     protected virtual void Update()
     {
 
-        if (player == null)
+        if (Player == null)
         {
             GetPlayerObjects();
         }
         //HP and damage checks
-        CheckHP();
+
+        if (!isKillCheckDelay)
+        {
+            CheckHP();
+            DestroyOnWorldExit();
+        }
+        else
+        {
+            DelayKillChecks();
+        }
+
         if (isExplosionDamageDelay)
         {
             ExplosionDamageDelayCountdown();
-        }
-
-        //Player dection and shoot state
-        CheckCanSeePlayer();
-        if (playerOnceSeen)
-        {
-            RotateTowardsPlayer();
-        }
-        if (playerDetected)
-        {
-            CheckShouldShoot();
-        }
-        if (startShoot)
-        {
-            Shoot();
         }
     }
 
@@ -88,7 +113,7 @@ public abstract class EnemyBehavior : MonoBehaviour
     /// <param name="damage"></param>
     protected virtual void TakeDamage(float damage)
     {
-        HealtPoints -= damage;
+        EnemyHealth -= damage;
     }
 
     /// <summary>
@@ -96,7 +121,7 @@ public abstract class EnemyBehavior : MonoBehaviour
     /// </summary>
     private void CheckHP()
     {
-        if (HealtPoints <= 0)
+        if (EnemyHealth <= 0)
         {
             Destroy(gameObject);
         }
@@ -143,87 +168,10 @@ public abstract class EnemyBehavior : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Default rotate / Rotes complete body towards the player on y axis
-    /// </summary>
-    protected virtual void RotateTowardsPlayer()
-    {
-
-        Vector3 direction = (playerLastSeenPostion - transform.position).normalized;
-
-        float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        Quaternion newDirection = Quaternion.AngleAxis(angle, Vector3.up);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, newDirection, rotateSmoothness * Time.deltaTime);
-
-    }
-
-    /// <summary>
-    /// Default check if can see player
-    /// </summary>
-    protected virtual void CheckCanSeePlayer()
-    {
-
-        if (player != null)
-        {
-            playerDirection = (player.transform.position - transform.position).normalized;
-        }
-        //Debug.DrawRay(transform.position, playerDirection * detectionRange, Color.red); //Debug
-
-        if (Physics.Raycast(transform.position, playerDirection, out RaycastHit hitInfo, detectionRange, ~LayerMask.GetMask("Enemy")))
-        {
-            if (hitInfo.transform.gameObject.layer == playerLayerMaskIndex)
-            {
-                playerDetected = true;
-                playerOnceSeen = true;
-                playerLastSeenPostion = hitInfo.transform.position;
-            }
-        }
-        else
-        {
-            playerDetected = false;
-            startShoot = false;
-        }
-    }
-
-    /// <summary>
-    /// Default check if should shoot
-    /// </summary>
-    protected virtual void CheckShouldShoot()
-    {
-        Vector3 lookDirection = transform.forward;
-        float angle = Vector3.Angle(lookDirection, playerDirection);
-
-        if (angle <= startShootAngle)
-        {
-            startShoot = true;
-        }
-        else
-        {
-            startShoot = false;
-        }
-    }
-
-    /// <summary>
-    /// Default shoot
-    /// </summary>
-    protected virtual void Shoot()
-    {
-        if (shootCooldown == 0)
-        {
-            Instantiate(projectile, transform.position + Vector3.forward, transform.rotation);
-            shootCooldown = shootInterval;
-
-        }
-        else
-        {
-            shootCooldown -= Time.deltaTime;
-            if (shootCooldown < 0) shootCooldown = 0;
-        }
-    }
 
     private void GetPlayerObjects()
     {
-        player = GameObject.FindWithTag("Player");
+        Player = GameObject.FindWithTag("Player");
     }
 
     private void DestroyOnWorldExit()
@@ -234,9 +182,36 @@ public abstract class EnemyBehavior : MonoBehaviour
         }
     }
 
+    private void DelayKillChecks()
+    {
+        killCheckDelay -= Time.deltaTime;
+
+        if (killCheckDelay <= 0) isKillCheckDelay = false;
+    }
 
     private void OnDestroy()
     {
         enemyManager.EnemyDied();
+    }
+
+    protected void GetStats()
+    {
+        EnemyHealth = enemyStats.EnemyHealth;
+        EnemyHealthRegeneration = enemyStats.EnemyHealthRegeneration;
+        EnemyBulletArmorPoints = enemyStats.EnemyBulletArmorPoints;
+        EnemyExplosionArmorPoints = enemyStats.EnemyExplosionArmorPoints;
+        EnemyMoveSpeed = enemyStats.EnemyMoveSpeed;
+        EnemyGroundAcceleration = enemyStats.EnemyGroundAcceleration;
+        EnemyAirAcceleration = enemyStats.EnemyAirAcceleration;
+        EnemyProjectileDamage = enemyStats.EnemyProjectileDamage;
+        EnemyMissleDamage = enemyStats.EnemyMissleDamage;
+        EnemyExplosionDamage = enemyStats.EnemyExplosionDamage;
+        EnemyExplosionRadius = enemyStats.EnemyExplosionRadius;
+        EnemyFirerate = enemyStats.EnemyFirerate;
+        BurstShots = enemyStats.BurstShots;
+        DetectionRange = enemyStats.DetectionRange;
+        StartShootAngle = enemyStats.StartShootAngle;
+        RotateSmoothness = enemyStats.RotateSmoothness;
+        RotateWeaponSmothness = enemyStats.RotateWeaponSmothness;
     }
 }

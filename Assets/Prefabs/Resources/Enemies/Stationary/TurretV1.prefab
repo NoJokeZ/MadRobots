@@ -305,7 +305,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2781275907699412209}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 0fda1464f2c762249b62f445b0e5f93c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -326,7 +326,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2781275907699412209}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 0fda1464f2c762249b62f445b0e5f93c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -351,6 +351,7 @@ GameObject:
   - component: {fileID: 1855147106617747928}
   - component: {fileID: 5293613519605632551}
   - component: {fileID: 7597077680992341178}
+  - component: {fileID: 1640304321665266081}
   m_Layer: 7
   m_Name: TurretV1
   m_TagString: Untagged
@@ -413,6 +414,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2e256c5df54b5f498fdad4164cbdb24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1640304321665266081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3301562608362752825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdf1b60bb8d22e7489fc17be0b8c47c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isWallInFront: 0
+  isWallBehind: 0
 --- !u!1 &4240902946756386496
 GameObject:
   m_ObjectHideFlags: 0

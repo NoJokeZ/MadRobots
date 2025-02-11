@@ -81,7 +81,7 @@ public abstract class EnemyManager : MonoBehaviour
             while (dummyAmount > 0)
             {
                 //Get random SpawnPoint and random enemy
-                int spawnPoint = Random.Range(0, dummySpawns.Count);
+                int spawnPoint = Random.Range(1, dummySpawns.Count);
                 int enemy = Random.Range(0, dummy.Length);
 
                 //Spawn that
@@ -101,7 +101,7 @@ public abstract class EnemyManager : MonoBehaviour
             while (stationaryAmount > 0)
             {
                 //Get random SpawnPoint and random enemy
-                int spawnPoint = Random.Range(0, stationarySpawns.Count);
+                int spawnPoint = Random.Range(1, stationarySpawns.Count);
                 int enemy = Random.Range(0, stationary.Length);
 
                 //Spawn that
@@ -121,7 +121,7 @@ public abstract class EnemyManager : MonoBehaviour
             while (movingAmount > 0)
             {
                 //Get random SpawnPoint and random enemy
-                int spawnPoint = Random.Range(0, movingSpawns.Count);
+                int spawnPoint = Random.Range(1, movingSpawns.Count);
                 int enemy = Random.Range(0, moving.Length);
 
                 //Spawn that
@@ -141,7 +141,7 @@ public abstract class EnemyManager : MonoBehaviour
             while (bossAmount > 0)
             {
                 //Get random SpawnPoint and random enemy
-                int spawnPoint = Random.Range(0, bossSpawns.Count);
+                int spawnPoint = Random.Range(1, bossSpawns.Count);
                 int enemy = Random.Range(0, boss.Length);
 
                 //Spawn that

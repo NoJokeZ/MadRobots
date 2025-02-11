@@ -131,7 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 28729257}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +162,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 36163843}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,7 +193,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 40187177}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,6 +283,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Map
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6cd42ab5f11c92946b54e7fc2f8e856e, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 6cd42ab5f11c92946b54e7fc2f8e856e, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -346,7 +354,7 @@ GameObject:
   - component: {fileID: 462818813}
   - component: {fileID: 462818814}
   - component: {fileID: 462818815}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Upgrade1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,7 +418,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 690000235}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stationary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -443,7 +451,7 @@ GameObject:
   - component: {fileID: 725337991}
   - component: {fileID: 725337992}
   - component: {fileID: 725337993}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Upgrade4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -507,7 +515,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 763786581}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Moving
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,7 +546,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 778515747}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PlayerSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -644,7 +652,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1154613285}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: EnemySpawns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -936,7 +944,7 @@ GameObject:
   - component: {fileID: 1378380073}
   - component: {fileID: 1378380074}
   - component: {fileID: 1378380075}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Upgrade2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1002,7 +1010,7 @@ GameObject:
   - component: {fileID: 1515411312}
   - component: {fileID: 1515411313}
   - component: {fileID: 1515411314}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Upgrade3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1134,7 +1142,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1874175120}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Dummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1286,7 +1294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2059677673}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: UpgradeObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1321,7 +1329,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2096293408}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Lights
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1352,7 +1360,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2101689874}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

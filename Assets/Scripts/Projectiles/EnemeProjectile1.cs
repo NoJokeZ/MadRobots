@@ -5,7 +5,7 @@ public class EnemeProjectile1 : ProjectileBehavior
     {
         base.Awake();
 
-        ProjectileSpeed = 4f;
+        ProjectileSpeed = 6f;
         LifeSpan = 30f;
         Damage = 3;
     }
