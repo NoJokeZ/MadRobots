@@ -73,5 +73,3 @@ Fix:
 +Lighitng in Canyon and BigCity -> bug only in Unity Editor, just generate Lightning in Lighting tab 
 
 +Player Death not working becasue problems with Main menu loading --> Pack den GameEnd aufruf in PLayer-ChechHP und Player check if under the map
-
-Some enemies drop trough map on spawn
