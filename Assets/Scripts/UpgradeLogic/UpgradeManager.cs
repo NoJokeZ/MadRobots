@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class UpgradeManager : MonoBehaviour
@@ -18,6 +16,7 @@ public class UpgradeManager : MonoBehaviour
 
     //Upgrade parent object
     private GameObject upgradeObject;
+    private GameObject descriptionTemplate;
 
     //Transforms for upgrade cubes
     private Transform upgradeTransform1;
@@ -28,7 +27,8 @@ public class UpgradeManager : MonoBehaviour
     //Upgrade event
     public UnityEvent UpgradeEvent;
 
-    //Upgrade selected bool
+    //Upgrade bools
+    private bool upgradesLoaded = false;
     public bool upgradeSelected = false;
 
     //Upgrade array
@@ -109,16 +109,17 @@ public class UpgradeManager : MonoBehaviour
         //Get all available Upgrades for current player type
         GetAvailableUpgrades();
 
+        descriptionTemplate = Resources.Load<GameObject>("DescriptionTemplate");
     }
 
     private void OnEnable()
     {
-        SceneManager.sceneLoaded += OnUpgradeSceneLoad;
+        SceneManager.sceneLoaded += OnSceneLoad;
     }
 
     private void OnDisable()
     {
-        SceneManager.sceneLoaded -= OnUpgradeSceneLoad;
+        SceneManager.sceneLoaded -= OnSceneLoad;
     }
 
 
@@ -136,9 +137,9 @@ public class UpgradeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Get random Upgrades on upgrade scene Load
+    /// Handles OnSceneLoad logics
     /// </summary>
-    public void OnUpgradeSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
+    public void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
     {
         if (gameManager == null)
         {
@@ -148,17 +149,23 @@ public class UpgradeManager : MonoBehaviour
 
         if (gameManager.CurrentGameState == GameState.Upgrading)
         {
-            //Create new event if not existing
+            //Create new event if it doesnt exists
             if (UpgradeEvent == null)
             {
                 UpgradeEvent = new UnityEvent();
             }
 
             upgradeSelected = false;
+            upgradesLoaded = true;
 
             GetRandomUpgrade();
 
             SpawnUpgradeCubes();
+        }
+        else if (upgradesLoaded && gameManager.CurrentGameState == GameState.Menu)
+        {
+            upgradesLoaded = false;
+            ResetUpgrade();
         }
 
     }
@@ -257,10 +264,18 @@ public class UpgradeManager : MonoBehaviour
     /// <returns></returns>
     private Upgrade GetRareUpgrade()
     {
-        int random = UnityEngine.Random.Range(0, availableRareUpgrades.Count);
-        Upgrade upgrade = availableRareUpgrades[random];
-        availableCommonUpgrades.Remove(upgrade);
-        return upgrade;
+        if (availableRareUpgrades.Count > 0)
+        {
+            int random = UnityEngine.Random.Range(0, availableRareUpgrades.Count);
+            Upgrade upgrade = availableRareUpgrades[random];
+            availableRareUpgrades.Remove(upgrade);
+            return upgrade;
+        }
+        else
+        {
+            Upgrade upgrade = GetCommonUpgrade();
+            return upgrade;
+        }
     }
 
     /// <summary>
@@ -269,30 +284,35 @@ public class UpgradeManager : MonoBehaviour
     /// <returns></returns>
     private Upgrade GetLegendaryUpgrade()
     {
-        int random = UnityEngine.Random.Range(0, availableLegendaryUpgrades.Count);
-        Upgrade upgrade = availableLegendaryUpgrades[random];
-        availableCommonUpgrades.Remove(upgrade);
-        return upgrade;
+        if(availableLegendaryUpgrades.Count > 0)
+        {
+            int random = UnityEngine.Random.Range(0, availableLegendaryUpgrades.Count);
+            Upgrade upgrade = availableLegendaryUpgrades[random];
+            availableLegendaryUpgrades.Remove(upgrade);
+            return upgrade;
+        }
+        else
+        {
+            Upgrade upgrade = GetRareUpgrade();
+            return upgrade;
+        }
     }
 
     /// <summary>
-    /// Resets the upgrade selection
+    /// Resets the upgrade if something was selected
     /// </summary>
-    private void ResetUpgrade(UpgradeSlot slot)
+    private void ResetUpgrade(UpgradeSlot pickedSlot)
     {
-
-        //Upgrade temp = gameObject.GetComponent<Upgrade>();
-
 
         Destroy(gameObject.GetComponent<UpgradeScript>());
 
         //Clears the upgrade event
         UpgradeEvent = new UnityEvent();
 
-        //Puts the reusable upgrade back in their respectiv lists
+        //Puts the reusable upgrades back in their respectiv lists
         for (int i = 0; i < upgrades.Length; i++)
         {
-            if (upgrades[i].IsStackable || i != (int)slot) //If the Upgrade is stackable or the upgrade was not chosen
+            if (upgrades[i].IsStackable || i != (int)pickedSlot) //If the Upgrade is stackable or the upgrade was not chosen
             {
                 switch (upgrades[i].Rarity)
                 {
@@ -310,9 +330,38 @@ public class UpgradeManager : MonoBehaviour
 
             //Clears the upgrade slot
             upgrades[i] = null;
-
         }
     }
+
+    /// <summary>
+    /// Resets the upgrade if nothing was selected
+    /// </summary>
+    private void ResetUpgrade()
+    {
+        //Clears the upgrade event
+        UpgradeEvent = new UnityEvent();
+
+        //Puts the reusable upgrades back in their respectiv lists
+        for (int i = 0; i < upgrades.Length; i++)
+        {
+            switch (upgrades[i].Rarity)
+            {
+                case UpgradeRarity.Common:
+                    availableCommonUpgrades.Add(upgrades[i]);
+                    break;
+                case UpgradeRarity.Rare:
+                    availableRareUpgrades.Add(upgrades[i]);
+                    break;
+                case UpgradeRarity.Legendary:
+                    availableLegendaryUpgrades.Add(upgrades[i]);
+                    break;
+            }
+
+            //Clears the upgrade slot
+            upgrades[i] = null;
+        }
+    }
+
 
     /// <summary>
     /// Adds the selected upgrade SO 
@@ -337,7 +386,7 @@ public class UpgradeManager : MonoBehaviour
 
 
         gameManager.UpgradeEnd();
-        
+
     }
 
     /// <summary>
@@ -397,9 +446,32 @@ public class UpgradeManager : MonoBehaviour
 
 
         Instantiate(upgrades[0].UpgradeSymbol, upgradeTransform1.position, upgradeTransform1.rotation);
+        SpawnUpgradeDescription(upgradeTransform1, upgrades[0].Name, upgrades[0].Description, upgrades[0].Rarity);
         Instantiate(upgrades[1].UpgradeSymbol, upgradeTransform2.position, upgradeTransform1.rotation);
+        SpawnUpgradeDescription(upgradeTransform2, upgrades[1].Name, upgrades[1].Description, upgrades[1].Rarity);
         Instantiate(upgrades[2].UpgradeSymbol, upgradeTransform3.position, upgradeTransform1.rotation);
+        SpawnUpgradeDescription(upgradeTransform3, upgrades[2].Name, upgrades[2].Description, upgrades[2].Rarity);
         Instantiate(upgrades[3].UpgradeSymbol, upgradeTransform4.position, upgradeTransform1.rotation);
+        SpawnUpgradeDescription(upgradeTransform4, upgrades[3].Name, upgrades[3].Description, upgrades[3].Rarity);
+    }
+
+    private void SpawnUpgradeDescription(Transform transform, string name, string description, UpgradeRarity upgradeRarity)
+    {
+        string completeDescription = ("<color=#950409>" + name + System.Environment.NewLine + description + "</color>" + System.Environment.NewLine);
+        if (upgradeRarity == UpgradeRarity.Common)
+        {
+            completeDescription += ("<color=#bcbcbc>" + upgradeRarity.ToString() + "</color>");
+        }
+        else if (upgradeRarity == UpgradeRarity.Rare)
+        {
+            completeDescription += ("<color=#0b5394>" + upgradeRarity.ToString() + "</color>");
+        }
+        else
+        {
+            completeDescription += ("<color=#e69138>" + upgradeRarity.ToString() + "</color>");
+        }
+        GameObject upgradeDescription = Instantiate(descriptionTemplate, transform.position, transform.rotation);
+        upgradeDescription.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = completeDescription;
     }
 }
 

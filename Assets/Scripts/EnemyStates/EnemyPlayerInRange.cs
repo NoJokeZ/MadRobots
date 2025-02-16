@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyPlayerInRange : EnemyState
@@ -28,14 +27,14 @@ public class EnemyPlayerInRange : EnemyState
     {
         base.Update();
         CheckPlayer();
-        if(playerDetected)
+        if (playerDetected)
         {
             CheckShoot();
             CheckMove();
             RotateBottomTowardsPlayer();
         }
 
-        if(playerOnceSeen)
+        if (playerOnceSeen)
         {
             RotateTopAndWeaponTowardsPlayer();
         }
@@ -128,7 +127,7 @@ public class EnemyPlayerInRange : EnemyState
             isMoving = true;
             Move(Direction.forward);
         }
-        else if(isLowHealth || distanceToPlayer < backOffDistance)
+        else if (isLowHealth || distanceToPlayer < backOffDistance)
         {
             isMoving = true;
             Move(Direction.backward);

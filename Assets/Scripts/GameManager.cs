@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    private AudioManager audioManager;
+
     public GameObject player { get; private set; }
     private Transform playerSpawn;
     private GameObject ChosenPlayerPrefab;
@@ -48,6 +50,8 @@ public class GameManager : MonoBehaviour
 
         CurrentGameState = GameState.Menu;
 
+        audioManager = AudioManager.Instance;
+
     }
 
     private void OnEnable()
@@ -58,12 +62,6 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-
-    public void OnPlayerDeath()
-    {
-        //GameEnd();
     }
 
     private void GetSceneInfos()
@@ -106,6 +104,7 @@ public class GameManager : MonoBehaviour
                 playerSpawn = GameObject.Find("PlayerSpawn").transform;
                 player = Instantiate(ChosenPlayerPrefab, playerSpawn.position, playerSpawn.rotation);
                 IsPlayerAlive = true;
+                audioManager.PlayMusic("Theme");
 
                 if (currentScene.SceneType == SceneType.Tutorial)
                 {
@@ -186,7 +185,7 @@ public class GameManager : MonoBehaviour
     {
         if (currentScene.SceneType == SceneType.BossLevel)
         {
-            GameEnd(); 
+            GameEnd();
         }
         else
         {

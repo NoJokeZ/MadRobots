@@ -47,7 +47,7 @@ public abstract class EnemyBehavior : MonoBehaviour
     //EnemyStats
     protected EnemyStats enemyStats;
 
-    
+
 
     //Gameobjects and components
     public GameObject Player { get; private set; }

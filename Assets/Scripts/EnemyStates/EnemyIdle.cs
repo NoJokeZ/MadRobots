@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyIdle : EnemyState
@@ -119,12 +117,12 @@ public class EnemyIdle : EnemyState
     /// </summary>
     private void IdleMove()
     {
-        if(!isMoving && !isWallInFront && idleMoveTimer <= 0)
+        if (!isMoving && !isWallInFront && idleMoveTimer <= 0)
         {
             int direction = Random.Range(0, 2);
             float seconds = Random.Range(1f, 5f);
             isMoving = true;
-            if(direction == 0)
+            if (direction == 0)
             {
                 StartCoroutine(MoveForSeconds(Direction.forward, seconds));
             }

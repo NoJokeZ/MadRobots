@@ -15,7 +15,7 @@ public abstract class PlayerBehavior : MonoBehaviour
 
     //PlayerStats
     //Healthpoints
-    protected float healthPoints;
+    public float HealthPoints { get; protected set; }
     protected float healthRegeneration;
 
     //Armor
@@ -27,9 +27,9 @@ public abstract class PlayerBehavior : MonoBehaviour
     protected float groundAcceleration;
     protected float airAcceleration;
     protected float jetPackPower;
-    protected float jetPackMaxDuration;
+    public float JetPackMaxDuration { get; protected set; }
 
-    protected float jetPackDuration;
+    public float JetPackDuration { get; protected set; }
 
     //Cooldown values
     protected float shootCooldown;
@@ -68,9 +68,8 @@ public abstract class PlayerBehavior : MonoBehaviour
     protected Transform[] barrels;
     protected int barrelsIndex = 1; //because 0 is always the parent object of the barrels. thanks unity...
     private GameManager gameManager;
+    private GameObject jetPackVisuals;
 
-    //Events
-    private UnityEvent onDeath;
 
     protected virtual void Awake()
     {
@@ -90,14 +89,9 @@ public abstract class PlayerBehavior : MonoBehaviour
         cameraBehavior = Camera.main.GetComponent<CameraBehavior>();
         weaponEnds = transform.Find("UpperBody/Weapons/WeaponEnds").gameObject;
         barrels = weaponEnds.GetComponentsInChildren<Transform>();
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-
-
-        //Events
-        onDeath = new UnityEvent();
-        onDeath.AddListener(cameraBehavior.ResetOnPlayerDeath);
-        onDeath.AddListener(gameManager.OnPlayerDeath);
-
+        gameManager = GameManager.Instance;
+        jetPackVisuals = transform.Find("LowerBody/JetPackVisuals").gameObject;
+        jetPackVisuals.SetActive(false);
     }
 
     protected void OnEnable()
@@ -135,8 +129,14 @@ public abstract class PlayerBehavior : MonoBehaviour
             velocity = rb.velocity; //Needed so that velocity is still beeing updated even if movement is locked
         }
 
-        DestroyOnWorldExit();
+        if (isInvincible)
+        {
+            invincibleCounter -= Time.deltaTime;
+            if (invincibleCounter <= 0) isInvincible = false;
+        }
 
+        DestroyOnWorldExit();
+        CheckHP();
     }
 
     protected virtual void FixedUpdate()
@@ -187,17 +187,23 @@ public abstract class PlayerBehavior : MonoBehaviour
         //refuel Jetpack while grounded
         if (isGrounded)
         {
-            jetPackDuration += Time.deltaTime;
-            if (jetPackDuration > jetPackMaxDuration) jetPackDuration = jetPackMaxDuration;
+            JetPackDuration += Time.deltaTime;
+            if (JetPackDuration > JetPackMaxDuration) JetPackDuration = JetPackMaxDuration;
         }
 
         //Jetpack use logic
-        if (jetPack.IsPressed() && jetPackDuration > 0)
+        if (jetPack.IsPressed() && JetPackDuration > 0)
         {
             velocity.y = jetPackPower;
-            jetPackDuration -= Time.deltaTime;
-            if (jetPackDuration < 0) jetPackDuration = 0; //no values underneat 0 for fuel display
+            JetPackDuration -= Time.deltaTime;
+            if (JetPackDuration < 0) JetPackDuration = 0; //no values underneat 0 for fuel display
+            jetPackVisuals.SetActive(true);
         }
+        else
+        {
+            jetPackVisuals.SetActive(false);
+        }
+        
     }
 
     /// <summary>
@@ -247,7 +253,7 @@ public abstract class PlayerBehavior : MonoBehaviour
             else
             {
                 //Bullet hit -> UI
-                healthPoints -= damage;
+                HealthPoints -= damage;
             }
         }
         else if (damageType.Equals(DamageType.Explosion))
@@ -260,7 +266,7 @@ public abstract class PlayerBehavior : MonoBehaviour
             else
             {
                 //Explosion hit -> UI
-                healthPoints -= damage;
+                HealthPoints -= damage;
             }
         }
     }
@@ -270,7 +276,7 @@ public abstract class PlayerBehavior : MonoBehaviour
     /// </summary>
     private void CheckHP()
     {
-        if (healthPoints <= 0)
+        if (HealthPoints <= 0)
         {
             gameManager.GameEnd();
             Destroy(gameObject);
@@ -286,16 +292,11 @@ public abstract class PlayerBehavior : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        onDeath.Invoke();
-    }
-
     protected virtual void GetPlayerStats()
     {
         //Get Values
         //Healthpoints
-        healthPoints = UpgradeManager.Instance.PlayerMaxHealth;
+        HealthPoints = UpgradeManager.Instance.PlayerMaxHealth;
         healthRegeneration = UpgradeManager.Instance.PlayerHealthRegeneration;
 
         //Armor
@@ -307,7 +308,7 @@ public abstract class PlayerBehavior : MonoBehaviour
         groundAcceleration = UpgradeManager.Instance.PlayerGroundAcceleration;
         airAcceleration = UpgradeManager.Instance.PlayerAirAcceleration;
         jetPackPower = UpgradeManager.Instance.PlayerJetPackPower;
-        jetPackMaxDuration = UpgradeManager.Instance.PlayerJetPackMaxDuration;
+        JetPackMaxDuration = UpgradeManager.Instance.PlayerJetPackMaxDuration;
 
         //Firerate
         firrate = UpgradeManager.Instance.PlayerFirerate;

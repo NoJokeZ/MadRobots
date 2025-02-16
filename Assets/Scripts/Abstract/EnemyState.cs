@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.ProBuilder;
 
 public abstract class EnemyState : MonoBehaviour
 {
@@ -110,7 +107,7 @@ public abstract class EnemyState : MonoBehaviour
 
     protected void WallCheck()
     {
-        Vector3 wallDetectionPosition = new Vector3 (lowerBody.position.x, lowerBody.position.y + 0.1f, lowerBody.position.z);
+        Vector3 wallDetectionPosition = new Vector3(lowerBody.position.x, lowerBody.position.y + 0.1f, lowerBody.position.z);
 
         Vector3 front = lowerBody.forward;
         Vector3 frontLeft = (lowerBody.forward + lowerBody.right * 0.5f);
@@ -189,7 +186,7 @@ public abstract class EnemyState : MonoBehaviour
     {
         float newAngle;
         Vector3 currentDirection = upperBody.forward;
-        if(direction == Direction.right)
+        if (direction == Direction.right)
         {
             newAngle = (Mathf.Atan2(currentDirection.x, currentDirection.y) * Mathf.Rad2Deg) + rotateAngle;
         }
@@ -220,7 +217,8 @@ public abstract class EnemyState : MonoBehaviour
     {
         if (shootCooldown == 0)
         {
-            Instantiate(projectile, weaponEnd.position, weaponEnd.rotation);
+            GameObject bulletClone = Instantiate(projectile, weaponEnd.position, weaponEnd.rotation);
+            bulletClone.GetComponent<ProjectileBehavior>().Damage = enemyMissleDamage;
             shootCooldown = enemyFirerate;
 
         }
@@ -235,7 +233,8 @@ public abstract class EnemyState : MonoBehaviour
     {
         if (shootCooldown == 0)
         {
-            Instantiate(projectile, weaponEnd.position, weaponEnd.rotation);
+            GameObject bulletClone = Instantiate(projectile, weaponEnd.position, weaponEnd.rotation);
+            bulletClone.GetComponent<ProjectileBehavior>().Damage = enemyMissleDamage;
             shotCount++;
             if (shotCount < burstShots)
             {

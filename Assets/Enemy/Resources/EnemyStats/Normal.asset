@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyHealth: 10
   EnemyHealthRegeneration: 0
-  EnemyBulletArmorPoints: 0
-  EnemyExplosionArmorPoints: 0
+  EnemyBulletArmorPoints: 1
+  EnemyExplosionArmorPoints: 1
   EnemyMoveSpeed: 4
   EnemyGroundAcceleration: 5
   EnemyAirAcceleration: 3
@@ -26,6 +26,6 @@ MonoBehaviour:
   EnemyFirerate: 2
   BurstShots: 3
   DetectionRange: 30
-  StartShootAngle: 30
+  StartShootAngle: 20
   RotateSmoothness: 40
   RotateWeaponSmothness: 40

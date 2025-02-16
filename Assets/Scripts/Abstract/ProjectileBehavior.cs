@@ -7,7 +7,7 @@ public abstract class ProjectileBehavior : MonoBehaviour
     public float DropOffDistance { get; protected set; }
     public float DropOffSpeed { get; protected set; }
     public float LifeSpan { get; protected set; }
-    public float Damage { get; protected set; }
+    public float Damage { get; set; }
 
     protected Vector3 velocity;
 
