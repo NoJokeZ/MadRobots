@@ -5,26 +5,31 @@ using UnityEngine;
 
 public abstract class EnemyManager : MonoBehaviour
 {
-
+    //Manager
     protected GameManager gameManager;
 
+    //Enemy amounts on map
     protected int dummyAmount;
     protected int stationaryAmount;
     protected int movingAmount;
     protected int bossAmount;
 
+    //Enemy spawn lists
     protected List<Transform> dummySpawns;
     protected List<Transform> stationarySpawns;
     protected List<Transform> movingSpawns;
     protected List<Transform> bossSpawns;
 
+    //Enemy prefab lists
     protected GameObject[] dummy;
     protected GameObject[] stationary;
     protected GameObject[] moving;
     protected GameObject[] boss;
 
+    //Map enemy count
     protected int enemyCount;
 
+    //Spawn logics
     protected bool isInitiating;
     protected bool allEnemiesSpawned = false;
 
@@ -62,12 +67,15 @@ public abstract class EnemyManager : MonoBehaviour
         bossSpawns = transform.Find("Boss").GetComponentsInChildren<Transform>().ToList<Transform>();
     }
 
+    /// <summary>
+    /// Gets all enemy prefabs
+    /// </summary>
     private void GetEnemies()
     {
-        dummy = Resources.LoadAll<GameObject>("Enemies/Dummy/");
-        stationary = Resources.LoadAll<GameObject>("Enemies/Stationary/");
-        moving = Resources.LoadAll<GameObject>("Enemies/Moving/");
-        boss = Resources.LoadAll<GameObject>("Enemies/Boss");
+        dummy = Resources.LoadAll<GameObject>("Enemy/Dummy/");
+        stationary = Resources.LoadAll<GameObject>("Enemy/Stationary/");
+        moving = Resources.LoadAll<GameObject>("Enemy/Moving/");
+        boss = Resources.LoadAll<GameObject>("Enemy/Boss");
     }
 
     /// <summary>
@@ -158,7 +166,9 @@ public abstract class EnemyManager : MonoBehaviour
         allEnemiesSpawned = true;
     }
 
-
+    /// <summary>
+    /// Checks if initialization is finished and starts the coroutinge for enemy count
+    /// </summary>
     private void CheckInitialization()
     {
         if (allEnemiesSpawned)
@@ -181,6 +191,9 @@ public abstract class EnemyManager : MonoBehaviour
         gameManager.LevelEnd();
     }
 
+    /// <summary>
+    /// Counts down the enemy count
+    /// </summary>
     public void EnemyDied()
     {
         enemyCount--;

@@ -3,22 +3,24 @@ using UnityEngine;
 
 public class EnemyIdle : EnemyState
 {
-
+    //Additional decision values
+    //Turning values
     private bool isTurning;
     private float idleTurnTimer;
     private float idleTurnDelayMin = 5f;
     private float idleTurnDelayMax = 10f;
-
+    //Turret turning values
     private bool isTurretTurning;
     private float idleTurretTurnTimer;
     private float idleTurretTurnDelayMin = 5f;
     private float idleTurretTurnDelayMax = 10f;
-
+    //Moving values
     private bool isMoving;
     private float idleMoveTimer;
     private float idleMoveDelayMin = 5f;
     private float idleMoveDelayMax = 10f;
 
+    //All states
     [SerializeField] EnemyState EnemyIdleState;
     [SerializeField] EnemyState EnemyPlayerInRangeState;
 
@@ -26,7 +28,6 @@ public class EnemyIdle : EnemyState
     protected override void Awake()
     {
         base.Awake();
-
     }
 
 
@@ -34,9 +35,12 @@ public class EnemyIdle : EnemyState
     {
         base.Update();
 
+        //Idle behaviours
         IdleTurn();
         IdleTurretTurn();
         IdleMove();
+
+        //Player check
         CheckPlayerInRange();
     }
     protected override void FixedUpdate()
@@ -54,9 +58,9 @@ public class EnemyIdle : EnemyState
     /// </summary>
     private void IdleTurn()
     {
-        if (!isTurning && isWallInFront)
+        if (!isTurning && isWallInFront) //Turn if wall is in front
         {
-            int direction = Random.Range(0, 2);
+            int direction = Random.Range(0, 2); //Random if left or right
             isTurning = true;
             if (direction == 0)
             {
@@ -67,10 +71,10 @@ public class EnemyIdle : EnemyState
                 StartCoroutine(TurnUntilNoWallInFront(Direction.right));
             }
         }
-        else if (!isTurning && idleTurnTimer <= 0)
+        else if (!isTurning && idleTurnTimer <= 0) //Turn after some time
         {
-            int direction = Random.Range(0, 2);
-            float seconds = Random.Range(1f, 5f);
+            int direction = Random.Range(0, 2); //Random if left or right
+            float seconds = Random.Range(1f, 5f); //Random for how long to turn
             isTurning = true;
             if (direction == 0)
             {
@@ -92,10 +96,10 @@ public class EnemyIdle : EnemyState
     /// </summary>
     private void IdleTurretTurn()
     {
-        if (!isTurretTurning && idleTurretTurnTimer <= 0)
+        if (!isTurretTurning && idleTurretTurnTimer <= 0) //Turn after some time
         {
-            int direction = Random.Range(0, 2);
-            float seconds = Random.Range(1f, 5f);
+            int direction = Random.Range(0, 2); //Random if left or right
+            float seconds = Random.Range(1f, 5f); //Random for how long to turn
             isTurretTurning = true;
             if (direction == 0)
             {
@@ -117,10 +121,10 @@ public class EnemyIdle : EnemyState
     /// </summary>
     private void IdleMove()
     {
-        if (!isMoving && !isWallInFront && idleMoveTimer <= 0)
+        if (!isMoving && !isWallInFront && idleMoveTimer <= 0) //Move after some time and if no wall is in front
         {
-            int direction = Random.Range(0, 2);
-            float seconds = Random.Range(1f, 5f);
+            int direction = Random.Range(0, 2); //Random if forwards or backwards
+            float seconds = Random.Range(1f, 5f); //Random for how long to move
             isMoving = true;
             if (direction == 0)
             {
@@ -144,13 +148,13 @@ public class EnemyIdle : EnemyState
     /// <returns></returns>
     private IEnumerator TurnUntilNoWallInFront(Direction direction)
     {
-        while (isWallInFront)
+        while (isWallInFront) //Rotate while wall is in front
         {
             RotateBottom(direction);
             yield return null;
         }
 
-        idleTurnTimer = Random.Range(idleTurnDelayMin, idleTurnDelayMax);
+        idleTurnTimer = Random.Range(idleTurnDelayMin, idleTurnDelayMax); //Random time until next normal turn
         isTurning = false;
     }
 
@@ -170,7 +174,7 @@ public class EnemyIdle : EnemyState
             yield return null;
         }
 
-        idleTurnTimer = Random.Range(idleTurnDelayMin, idleTurnDelayMax);
+        idleTurnTimer = Random.Range(idleTurnDelayMin, idleTurnDelayMax); //Random time until next normal turn
         isTurning = false;
     }
 
@@ -180,7 +184,7 @@ public class EnemyIdle : EnemyState
     /// <param name="direction"></param>
     /// <param name="seconds"></param>
     /// <returns></returns>
-    private IEnumerator TurretTurnForSeconds(Direction direction, float seconds)
+    private IEnumerator TurretTurnForSeconds(Direction direction, float seconds) 
     {
         float turretTurnTimer = seconds;
         while (turretTurnTimer >= 0)
@@ -190,7 +194,7 @@ public class EnemyIdle : EnemyState
             yield return null;
         }
 
-        idleTurnTimer = Random.Range(idleTurretTurnDelayMin, idleTurretTurnDelayMax);
+        idleTurnTimer = Random.Range(idleTurretTurnDelayMin, idleTurretTurnDelayMax); //Random time until next normal turn
         isTurretTurning = false;
     }
 
@@ -207,11 +211,11 @@ public class EnemyIdle : EnemyState
         {
             Move(direction);
             moveTimer -= Time.deltaTime;
-            if (direction == Direction.forward && isWallInFront)
+            if (direction == Direction.forward && isWallInFront) //Stop if wall is in the way
             {
                 break;
             }
-            else if (direction == Direction.backward && isWallBehind)
+            else if (direction == Direction.backward && isWallBehind) //Stop if wall is in the way
             {
                 break;
             }
@@ -219,11 +223,13 @@ public class EnemyIdle : EnemyState
             yield return null;
         }
 
-        idleMoveTimer = Random.Range(idleMoveDelayMin, idleMoveDelayMax);
+        idleMoveTimer = Random.Range(idleMoveDelayMin, idleMoveDelayMax); //Random time until next normal turn
         isMoving = false;
     }
 
-
+    /// <summary>
+    /// Checks if the player is in range and switches to another state
+    /// </summary>
     private void CheckPlayerInRange()
     {
         playerDirection = (player.transform.position - upperBody.position).normalized;
@@ -238,8 +244,10 @@ public class EnemyIdle : EnemyState
         }
     }
 
+
     private void OnDisable()
     {
+        //Stops all ongoing movement coroutines
         StopAllCoroutines();
     }
 }

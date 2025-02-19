@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,7 +11,7 @@ public class UpgradeManager : MonoBehaviour
 
     //Player objects
     private GameObject player;
-    private PlayerBehavior playerBehavior;
+    private PlayerBehaviour playerBehavior;
     public PlayerType CurrentPlayerType;
 
     //Upgrade parent object
@@ -103,13 +103,10 @@ public class UpgradeManager : MonoBehaviour
             UpgradeEvent = new UnityEvent();
         }
 
-        StartCoroutine(GetPlayerObjects());
-
-
         //Get all available Upgrades for current player type
         GetAvailableUpgrades();
 
-        descriptionTemplate = Resources.Load<GameObject>("DescriptionTemplate");
+        descriptionTemplate = Resources.Load<GameObject>("Upgrade/DescriptionTemplate");
     }
 
     private void OnEnable()
@@ -126,14 +123,6 @@ public class UpgradeManager : MonoBehaviour
     private void Start()
     {
         gameManager = GameManager.Instance;
-    }
-    private void Update()
-    {
-        //Only for testing and debugging because player can respawn in testing
-        if (player == null)
-        {
-            GetPlayerObjects();
-        }
     }
 
     /// <summary>
@@ -168,28 +157,6 @@ public class UpgradeManager : MonoBehaviour
             ResetUpgrade();
         }
 
-    }
-
-
-    /// <summary>
-    /// Gets all needed values from the player
-    /// </summary>
-    private IEnumerator GetPlayerObjects()
-    {
-        while (player == null)
-        {
-            player = GameObject.FindWithTag("Player");
-            yield return null;
-        }
-
-        playerBehavior = player.GetComponent<PlayerBehavior>();
-        CurrentPlayerType = playerBehavior.myType;
-
-        CurrentPlayerType = PlayerType.Rocket; //NEEEDED ONLY UNTIL MENU AND PLAYER SELECTION IS IMPLEMENTED
-
-
-        //Get player stats
-        GetPlayerStats(CurrentPlayerType);
     }
 
     /// <summary>
@@ -330,6 +297,8 @@ public class UpgradeManager : MonoBehaviour
 
             //Clears the upgrade slot
             upgrades[i] = null;
+
+            upgradesLoaded = false;
         }
     }
 
@@ -376,14 +345,14 @@ public class UpgradeManager : MonoBehaviour
         upgradeSelected = true;
 
         //Adds the selects SO
-        gameObject.AddComponent(upgrades[(int)slot].UpgradeScript.GetClass());
+        Type scriptType = Type.GetType((upgrades[(int)slot].UpgradeScriptName));
+        gameObject.AddComponent(scriptType);
 
         //Activate the upgrade from the SO
         UpgradeEvent.Invoke();
 
         //Resets the upgrade selection
         ResetUpgrade(slot);
-
 
         gameManager.UpgradeEnd();
 
@@ -393,17 +362,17 @@ public class UpgradeManager : MonoBehaviour
     /// Gets player base stats
     /// </summary>
     /// <param name="playerType"></param>
-    private void GetPlayerStats(PlayerType playerType)
+    public void GetPlayerStats(PlayerType playerType)
     {
         //Load SO
         switch (playerType)
         {
             case PlayerType.Universal:
-                playerStats = Resources.Load<PlayerStats>("UniversalStats");
+                playerStats = Resources.Load<PlayerStats>("PlayerStats/UniversalStats");
                 break;
 
             case PlayerType.Rocket:
-                playerStats = Resources.Load<PlayerStats>("RocketV1Stats");
+                playerStats = Resources.Load<PlayerStats>("PlayerStats/RocketV1Stats");
                 break;
         }
 
@@ -436,7 +405,9 @@ public class UpgradeManager : MonoBehaviour
         PlayerSpecialAbilityAmmo = playerStats.PlayerSpecialAbilityAmmo;
     }
 
-
+    /// <summary>
+    /// Spawns in the Upgrade cubes for display
+    /// </summary>
     private void SpawnUpgradeCubes()
     {
         upgradeTransform1 = GameObject.Find("Upgrade1").transform;
@@ -455,6 +426,13 @@ public class UpgradeManager : MonoBehaviour
         SpawnUpgradeDescription(upgradeTransform4, upgrades[3].Name, upgrades[3].Description, upgrades[3].Rarity);
     }
 
+    /// <summary>
+    /// Spawns in the desription for the upgrade cubes
+    /// </summary>
+    /// <param name="transform"></param>
+    /// <param name="name"></param>
+    /// <param name="description"></param>
+    /// <param name="upgradeRarity"></param>
     private void SpawnUpgradeDescription(Transform transform, string name, string description, UpgradeRarity upgradeRarity)
     {
         string completeDescription = ("<color=#950409>" + name + System.Environment.NewLine + description + "</color>" + System.Environment.NewLine);

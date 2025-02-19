@@ -1,4 +1,4 @@
-public class EnemeProjectile1 : ProjectileBehavior
+public class EnemeProjectile1 : ProjectileBehaviour
 {
 
     protected override void Awake()

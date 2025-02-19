@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49e9d38f58bf658458d5a795114d40c1, type: 3}
+  m_Name: RocketV1Stats
+  m_EditorClassIdentifier: 
+  PlayerMaxHealth: 20
+  PlayerHealthRegeneration: 0
+  PlayerBulletArmorPoints: 2
+  PlayerExplosionArmorPoints: 2
+  PlayerMoveSpeed: 6
+  PlayerGroundAcceleration: 10
+  PlayerAirAcceleration: 3
+  PlayerJetPackPower: 3
+  PlayerJetPackMaxDuration: 3
+  PlayerProjectileDamage: 1
+  PlayerMissleDamage: 1
+  PlayerExplosionDamage: 5
+  PlayerExplosionRadius: 1
+  PlayerFirerate: 2.5
+  PlayerSpecialAbilityAmmo: 3

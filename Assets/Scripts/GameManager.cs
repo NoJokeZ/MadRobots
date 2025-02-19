@@ -4,29 +4,34 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    //Gamestate
+    public GameState CurrentGameState { get; private set; }
+    
+    //Gameobjects
     public static GameManager Instance;
-
     private AudioManager audioManager;
-
+    private UpgradeManager upgradeManager;
     public GameObject player { get; private set; }
     private Transform playerSpawn;
     private GameObject ChosenPlayerPrefab;
+
+    //Player isalive value
     public bool IsPlayerAlive { get; private set; } = false;
 
+    //Level values
     private int easyLevelAmount = 3;
     private int levelCounter = 0;
 
-    public GameState CurrentGameState { get; private set; }
-
+    //Scene info
     private List<SceneInfo> basicLevels = new();
     private List<SceneInfo> bossLevels = new();
     private List<SceneInfo> upgradeLevels = new();
     private SceneInfo tutorialLevel;
     private SceneInfo mainMenu;
+    public SceneInfo currentScene { get; private set; }
 
-    private SceneInfo currentScene;
-
-
+    //AudioSource for music
+    private AudioSource cameraMusicSource;
 
 
 
@@ -44,14 +49,18 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        ChosenPlayerPrefab = Resources.Load<GameObject>("RocketV1");
+        ChosenPlayerPrefab = Resources.Load<GameObject>("Player/RocketV1");
 
         GetSceneInfos();
 
         CurrentGameState = GameState.Menu;
 
-        audioManager = AudioManager.Instance;
+    }
 
+    private void Start()
+    {
+        audioManager = AudioManager.Instance;
+        upgradeManager = UpgradeManager.Instance;
     }
 
     private void OnEnable()
@@ -64,6 +73,9 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    /// <summary>
+    /// Gets all scene infos
+    /// </summary>
     private void GetSceneInfos()
     {
         SceneInfo[] allScenes = Resources.LoadAll<SceneInfo>(""); //Load all scene infos there are
@@ -94,17 +106,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// On scene load logic
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="loadSceneMode"></param>
     public void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         if (currentScene != null)
         {
             if (currentScene.SceneType != SceneType.Menu)
             {
-
                 playerSpawn = GameObject.Find("PlayerSpawn").transform;
                 player = Instantiate(ChosenPlayerPrefab, playerSpawn.position, playerSpawn.rotation);
                 IsPlayerAlive = true;
-                audioManager.PlayMusic("Theme");
+                cameraMusicSource = Camera.main.GetComponent<AudioSource>();
+                cameraMusicSource.loop = true;
+                audioManager.PlayMusic("Theme", cameraMusicSource); 
 
                 if (currentScene.SceneType == SceneType.Tutorial)
                 {
@@ -119,8 +137,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Start the game or next level
+    /// </summary>
     public void GameStart()
     {
+        if (levelCounter == 0)
+        {
+            upgradeManager.GetPlayerStats(PlayerType.Rocket);
+        }
+
         //Selecet random level from basic levels
         int level = Random.Range(0, basicLevels.Count);
 
@@ -136,14 +162,22 @@ public class GameManager : MonoBehaviour
         CurrentGameState = GameState.Running;
     }
 
+    /// <summary>
+    /// Starts the tutorial level
+    /// </summary>
     public void TutorialStart()
     {
         SceneManager.LoadScene(tutorialLevel.name);
         CurrentGameState = GameState.Tutorial;
     }
 
+    /// <summary>
+    /// Ends the game
+    /// </summary>
     public void GameEnd()
     {
+        audioManager.StopMusic("Theme", cameraMusicSource);
+
         //Clears all level Lists
         basicLevels.Clear();
         bossLevels.Clear();
@@ -162,10 +196,14 @@ public class GameManager : MonoBehaviour
         //Loads the main menu
         SceneManager.LoadScene(mainMenu.name);
         currentScene = mainMenu;
+        CurrentGameState = GameState.Menu;
 
         GetSceneInfos();
     }
 
+    /// <summary>
+    /// Starts the boss level
+    /// </summary>
     private void BossStart()
     {
         //Selecet random level from basic levels
@@ -181,6 +219,9 @@ public class GameManager : MonoBehaviour
         CurrentGameState = GameState.Running;
     }
 
+    /// <summary>
+    /// Checks what happens after level end
+    /// </summary>
     public void LevelEnd()
     {
         if (currentScene.SceneType == SceneType.BossLevel)
@@ -193,6 +234,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Starts the upgrade level
+    /// </summary>
     private void UpgradeStart()
     {
         //Selecet random level from basic levels
@@ -205,6 +249,9 @@ public class GameManager : MonoBehaviour
         CurrentGameState = GameState.Upgrading;
     }
 
+    /// <summary>
+    /// Ends the upgrade level
+    /// </summary>
     public void UpgradeEnd()
     {
         if (levelCounter < easyLevelAmount)
